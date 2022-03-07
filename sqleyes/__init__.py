@@ -1,1 +1,0 @@
-from sqleyes.example_module import example_function

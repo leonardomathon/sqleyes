@@ -1,0 +1,1 @@
+SQL_FUNCTIONS = ["MIN", "MAX", "COUNT", "AVG", "SUM"]
