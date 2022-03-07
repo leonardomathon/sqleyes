@@ -1,3 +1,4 @@
+"""Utility functions w.r.t queries"""
 import re
 from typing import List
 
@@ -9,14 +10,14 @@ def get_columns_from_select_statement(query: str) -> List[str]:
     """
     This function takes a query string as input and returns a list of columns
     in the SELECT statement.
-    
+
     Parameters:
         query (str): The query string.
-        
+
     Returns:
         columns (list): A list of columns selected in the SELECT statement.
     """
-    columns = re.findall(r'SELECT (.*?) FROM', query, 
+    columns = re.findall(r'SELECT (.*?) FROM', query,
         flags=re.DOTALL | re.IGNORECASE)
 
     if len(columns) == 0:
@@ -30,10 +31,10 @@ def get_columns_from_group_by_statement(query: str) -> List[str]:
     """
     This function takes a query string as input and returns a list of columns
     in the GROUP BY statement.
-    
+
     Parameters:
         query (str): A SQL query string.
-        
+
     Returns:
         List[str]: A list of column names in the GROUP BY statement.
     """
@@ -61,7 +62,7 @@ def get_columns_from_group_by_statement(query: str) -> List[str]:
                 group_columns.append(identifier.get_name())
         elif isinstance(item, sqlparse.sql.Identifier):
             group_columns.append(item.get_name())
-    
+
     return group_columns
 
 def check_single_value_rule(columns: List[str]) -> bool:
@@ -85,8 +86,8 @@ def check_single_value_rule(columns: List[str]) -> bool:
         for function in SQL_FUNCTIONS:
             if column.find(function) != -1:
                 single_value = True
-        
+
         if not single_value:
             return False
-    
+
     return True

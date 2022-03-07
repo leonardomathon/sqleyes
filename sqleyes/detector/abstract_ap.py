@@ -1,3 +1,4 @@
+"""Abstract anti-pattern detector class"""
 from abc import ABC, abstractmethod
 
 class APDetector(ABC):
