@@ -6,6 +6,7 @@ import sqlparse
 
 from sqleyes.utils.query_keywords import SQL_FUNCTIONS
 
+
 def get_columns_from_select_statement(query: str) -> List[str]:
     """
     This function takes a query string as input and returns a list of columns
@@ -18,7 +19,7 @@ def get_columns_from_select_statement(query: str) -> List[str]:
         columns (list): A list of columns selected in the SELECT statement.
     """
     columns = re.findall(r'SELECT (.*?) FROM', query,
-        flags=re.DOTALL | re.IGNORECASE)
+                         flags=re.DOTALL | re.IGNORECASE)
 
     if len(columns) == 0:
         return []
@@ -26,6 +27,7 @@ def get_columns_from_select_statement(query: str) -> List[str]:
     columns = columns[0].split(',')
     columns = [column.strip() for column in columns]
     return columns
+
 
 def get_columns_from_group_by_statement(query: str) -> List[str]:
     """
@@ -56,7 +58,7 @@ def get_columns_from_group_by_statement(query: str) -> List[str]:
 
     # Get column names
     group_columns = []
-    for item in tokens[i : j + 1]:
+    for item in tokens[i:j + 1]:
         if isinstance(item, sqlparse.sql.IdentifierList):
             for identifier in item.get_identifiers():
                 group_columns.append(identifier.get_name())
@@ -64,6 +66,7 @@ def get_columns_from_group_by_statement(query: str) -> List[str]:
             group_columns.append(item.get_name())
 
     return group_columns
+
 
 def check_single_value_rule(columns: List[str]) -> bool:
     """

@@ -3,7 +3,9 @@ import re
 from sqleyes.detector.abstract_ap import APDetector
 from sqleyes.detector.detector_output import DetectorOutput
 
+
 class ImplicitColumnsAPDetector(APDetector):
+
     type = "Implict Columns"
 
     def __init__(self, query):
@@ -13,6 +15,7 @@ class ImplicitColumnsAPDetector(APDetector):
         pattern = re.compile("(SELECT\\s+\\*)", re.IGNORECASE)
 
         if pattern.search(self.query):
-            return DetectorOutput(detector_type=self.detector_type, type=self.type)
+            return DetectorOutput(detector_type=self.detector_type,
+                                  type=self.type)
 
         return None
