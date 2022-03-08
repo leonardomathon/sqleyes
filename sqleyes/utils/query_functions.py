@@ -67,6 +67,7 @@ def get_columns_from_group_by_statement(query: str) -> List[str]:
 
     return group_columns
 
+
 def check_single_value_rule(columns: List[str]) -> bool:
     """
     This function checks if the columns in the list break the single-value

@@ -1,7 +1,8 @@
 """Tests for sqleyes.utils.query_functions"""
 import pytest
 
-from sqleyes.utils.query_functions import (check_single_value_rule, get_columns_from_select_statement,
+from sqleyes.utils.query_functions import (check_single_value_rule,
+                                           get_columns_from_select_statement,
                                            get_columns_from_group_by_statement)
 
 
@@ -32,11 +33,11 @@ from sqleyes.utils.query_functions import (check_single_value_rule, get_columns_
     ),
     (
         "SELECT pCat, AVG(price) FROM product GROUP BY pCat",
-        ["pCat","AVG(price)"]
+        ["pCat", "AVG(price)"]
     ),
     (
         "select pCat, AVG(price) from product GROUP BY pCat",
-        ["pCat","AVG(price)"]
+        ["pCat", "AVG(price)"]
     ),
 ])
 def test_get_columns_from_select_statement(test_input, expected):
@@ -45,7 +46,7 @@ def test_get_columns_from_select_statement(test_input, expected):
 
 @pytest.mark.parametrize("test_input, expected", [
     (
-        "SELECT * FROM product WHERE pId > 10", 
+        "SELECT * FROM product WHERE pId > 10",
         []
     ),
     (
@@ -81,4 +82,3 @@ def test_get_columns_from_group_by_statement(test_input, expected):
 ])
 def test_check_single_value_rule(test_input, expected):
     assert check_single_value_rule(test_input) == expected
-
