@@ -48,7 +48,7 @@ def get_columns_from_group_by_statement(query: str) -> List[str]:
             break
 
     # Query has no GROUP BY statement
-    if i == len(tokens):
+    if i == len(tokens) - 1:
         return []
 
     # Find possible index of next keyword
@@ -66,7 +66,6 @@ def get_columns_from_group_by_statement(query: str) -> List[str]:
             group_columns.append(item.get_name())
 
     return group_columns
-
 
 def check_single_value_rule(columns: List[str]) -> bool:
     """
@@ -87,7 +86,7 @@ def check_single_value_rule(columns: List[str]) -> bool:
             single_value = True
 
         for function in SQL_FUNCTIONS:
-            if column.find(function) != -1:
+            if re.search(function, column, re.IGNORECASE):
                 single_value = True
 
         if not single_value:
