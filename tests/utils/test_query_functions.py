@@ -75,6 +75,7 @@ def test_get_columns_from_group_by_statement(test_input, expected):
         (["pId"], False),
         (["AVG(price)"], True),
         (["avg(price)"], True),
+        (["*"], True),
         (["pId", "AVG(price)"], False),
         (["AVG(price)", "pId"], False),
 ])
