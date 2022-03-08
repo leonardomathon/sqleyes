@@ -2,6 +2,7 @@
 
 from sqleyes.detector.detector import Detector
 
+
 def main(query: str):
     """
     This function bootstraps the detector and runs it

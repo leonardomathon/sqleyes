@@ -12,8 +12,10 @@ parser.add_argument('-q', '--query', metavar="", type=str, required=True,
 
 args = parser.parse_args()
 
+
 def cli():
     print(main(args.query))
+
 
 if __name__ == '__main__':
     print(main(args.query))
