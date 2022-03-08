@@ -2,6 +2,8 @@
 
 ---
 
+![Tests](https://github.com/mCodingLLC/SlapThatLikeButton-TestingStarterProject/actions/workflows/tests.yml/badge.svg)
+
 ## About SQLEyes
 
 Sqleyes is a CLI tool for analyzing simple, raw SQL queries for common sql anti-patterns.
