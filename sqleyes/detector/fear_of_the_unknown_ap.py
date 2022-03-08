@@ -3,6 +3,7 @@ import re
 from sqleyes.detector.abstract_ap import APDetector
 from sqleyes.detector.detector_output import DetectorOutput
 
+
 class FearOfTheUnknownApDetector(APDetector):
     type = "Fear of the Unknown"
 
@@ -16,6 +17,6 @@ class FearOfTheUnknownApDetector(APDetector):
         for pattern in patterns:
             if pattern.search(self.query):
                 return DetectorOutput(detector_type=self.detector_type,
-                    type=self.type)
+                                      type=self.type)
 
         return None

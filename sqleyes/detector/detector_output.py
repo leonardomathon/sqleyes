@@ -1,6 +1,7 @@
 """Detector Ouput class specifying general output format"""
 import json
 
+
 class DetectorOutput:
     """
     This class represents the output of a detector.
@@ -15,8 +16,8 @@ class DetectorOutput:
 
     def __create_dictionary(self):
         return {
-        "type": self.type,
-        "detector_type": self.detector_type
+            "type": self.type,
+            "detector_type": self.detector_type
         }
 
     def __repr__(self):
