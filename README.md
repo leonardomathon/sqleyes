@@ -1,4 +1,6 @@
-<img src="./design/logo-combined.svg" alt="SQLEyes" title="SQLEyes logo" style="max-width:100%; width:100%">
+<p align="center">
+<img src="https://raw.githubusercontent.com/leonardomathon/sqleyes/develop/design/logo-combined.svg" alt="SQLEyes" title="SQLEyes logo" style="max-width:100%; width:60%">
+</p>
 
 ---
 
