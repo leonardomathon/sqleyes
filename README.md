@@ -51,7 +51,7 @@ from sqleyes.main import main
 anti_patterns = main("SELECT * FROM product")
 ```
 
-### Repository
+## Repository
 
 This repository contains the main SQLEyes package as well as the unit tests
 
@@ -67,12 +67,15 @@ This repository contains the main SQLEyes package as well as the unit tests
 8. Make sure linting and static type hinting is proper by running `flake8 sqleyes tests` and `mypy sqleyes`.
 9. Create a pull request describing your feature.
 
-> This project was developed as a master's graduation project at Eindhoven University of Technology.
-> Code boilerplate and best practices from [best-practice-and-impact](https://github.com/best-practice-and-impact/example-package-python).
-
 ### Building and distribution
 
 1. Make sure all tests passed, linting and static type hinting are proper (see steps 7 & 8 of [Contribution](#Contributing)).
 2. Increase version number accordingly.
 3. Run `python -m build` in the root directory. A `dist` folder will be generated.
 4. Upload the package to PyPI using Twine (`pip install twine`) using the following command: `twine upload dist/*`.
+
+## Acknowledgements
+
+> This project was developed as a master's graduation project at Eindhoven University of Technology.
+> Code boilerplate and best practices from [best-practice-and-impact](https://github.com/best-practice-and-impact/example-package-python).
+> This package depends on some of [sqlparse](https://pypi.org/project/sqlparse/) features for parsing SQL queries.
