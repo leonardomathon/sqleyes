@@ -6,7 +6,7 @@ from sqleyes.detector.detector_output import DetectorOutput
 
 
 class FearOfTheUnknownDetector(AbstractDetector):
-    
+
     type = DEFINITIONS["anti_patterns"]["fear_of_the_unknown"]["type"]
 
     def __init__(self, query):

@@ -10,7 +10,7 @@ from sqleyes.utils.query_functions import (check_single_value_rule,
 
 
 class AmbiguousGroupsDetector(AbstractDetector):
-    
+
     type = DEFINITIONS["anti_patterns"]["ambiguous_groups"]["type"]
 
     def __init__(self, query):

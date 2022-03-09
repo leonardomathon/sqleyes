@@ -5,7 +5,6 @@ from sqleyes.detector.definitions import DEFINITIONS
 from sqleyes.detector.detector_output import DetectorOutput
 
 
-
 class ImplicitColumnsDetector(AbstractDetector):
 
     type = DEFINITIONS["anti_patterns"]["implicit_columns"]["type"]
