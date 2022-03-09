@@ -6,7 +6,7 @@ from sqleyes.detector.detector_output import DetectorOutput
 
 class ImplicitColumnsAPDetector(APDetector):
 
-    type = "Implict Columns"
+    type = "Implicit Columns"
 
     def __init__(self, query):
         super().__init__(query)
