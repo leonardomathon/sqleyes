@@ -25,5 +25,5 @@ class DetectorOutput:
 
     def __eq__(self, other):
         if isinstance(self, other.__class__):
-            return (self.type == other.type 
+            return (self.type == other.type
                     and self.detector_type == other.detector_type)
