@@ -132,6 +132,7 @@ def test_main_fear_of_the_unknown(test_input, expected):
 def test_main_ambiguous_groups(test_input, expected):
     assert main(test_input) == expected
 
+
 @pytest.mark.parametrize("test_input, expected", [
     (
         "SELECT pId FROM product ORDER BY price",

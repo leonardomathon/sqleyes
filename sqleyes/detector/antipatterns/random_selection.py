@@ -19,6 +19,6 @@ class RandomSelectionDetector(AbstractDetector):
         for pattern in patterns:
             if pattern.search(self.query):
                 return DetectorOutput(detector_type=self.detector_type,
-                                    type=self.type)
+                                      type=self.type)
 
         return None
