@@ -1,4 +1,4 @@
-"""Implicit Columns anti-pattern detector class"""
+"""Random Selection anti-pattern detector class"""
 import re
 from sqleyes.detector.antipatterns.abstract_base_class import AbstractDetector
 from sqleyes.detector.definitions import DEFINITIONS
