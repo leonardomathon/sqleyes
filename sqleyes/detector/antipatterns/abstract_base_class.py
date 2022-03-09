@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 
 
-class APDetector(ABC):
+class AbstractDetector(ABC):
     """
     This is a class for detecting anti-patterns.
 
