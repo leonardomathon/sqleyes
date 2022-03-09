@@ -22,3 +22,8 @@ class DetectorOutput:
 
     def __repr__(self):
         return json.dumps(self.__create_dictionary())
+
+    def __eq__(self, other):
+        if isinstance(self, other.__class__):
+            return (self.type == other.type 
+                    and self.detector_type == other.detector_type)
