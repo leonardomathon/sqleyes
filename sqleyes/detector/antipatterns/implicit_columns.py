@@ -1,10 +1,10 @@
 """Implicit Columns anti-pattern detector class"""
 import re
-from sqleyes.detector.antipatterns.abstract_base_class import APDetector
+from sqleyes.detector.antipatterns.abstract_base_class import AbstractDetector
 from sqleyes.detector.detector_output import DetectorOutput
 
 
-class ImplicitColumnsAPDetector(APDetector):
+class ImplicitColumnsDetector(AbstractDetector):
 
     type = "Implict Columns"
 

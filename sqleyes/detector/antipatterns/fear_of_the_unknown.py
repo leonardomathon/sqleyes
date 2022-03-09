@@ -1,10 +1,10 @@
 """Fear of the Unknown anti-pattern detector class"""
 import re
-from sqleyes.detector.antipatterns.abstract_base_class import APDetector
+from sqleyes.detector.antipatterns.abstract_base_class import AbstractDetector
 from sqleyes.detector.detector_output import DetectorOutput
 
 
-class FearOfTheUnknownApDetector(APDetector):
+class FearOfTheUnknownDetector(AbstractDetector):
     type = "Fear of the Unknown"
 
     def __init__(self, query):
