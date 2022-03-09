@@ -143,7 +143,17 @@ def test_main_ambiguous_groups(test_input, expected):
          DEFINITIONS["anti_patterns"]["random_selection"]["type"])]
     ),
     (
+        "SELECT pId FROM product ORDER BY RANDOM()",
+        [DetectorOutput("anti-pattern",
+         DEFINITIONS["anti_patterns"]["random_selection"]["type"])]
+    ),
+    (
         "SELECT pId FROM product ORDER BY rand()",
+        [DetectorOutput("anti-pattern",
+         DEFINITIONS["anti_patterns"]["random_selection"]["type"])]
+    ),
+    (
+        "SELECT pId FROM product ORDER BY random()",
         [DetectorOutput("anti-pattern",
          DEFINITIONS["anti_patterns"]["random_selection"]["type"])]
     ),
@@ -159,6 +169,26 @@ def test_main_ambiguous_groups(test_input, expected):
     ),
     (
         "SELECT pId FROM product WHERE price > 9.99 ORDER BY RAND() LIMIT 1",
+        [DetectorOutput("anti-pattern",
+         DEFINITIONS["anti_patterns"]["random_selection"]["type"])]
+    ),
+    (
+        "SELECT pId FROM product WHERE price > 9.99 ORDER BY  RAND()  LIMIT 1",
+        [DetectorOutput("anti-pattern",
+         DEFINITIONS["anti_patterns"]["random_selection"]["type"])]
+    ),
+    (
+        "SELECT pId FROM product ORDER BY RAND(6) LIMIT 1",
+        [DetectorOutput("anti-pattern",
+         DEFINITIONS["anti_patterns"]["random_selection"]["type"])]
+    ),
+    (
+        "SELECT pId FROM product ORDER BY RAND(6) LIMIT 1",
+        [DetectorOutput("anti-pattern",
+         DEFINITIONS["anti_patterns"]["random_selection"]["type"])]
+    ),
+    (
+        "SELECT pId FROM product ORDER BY RAND(6)*(10-5+1)+5 LIMIT 1",
         [DetectorOutput("anti-pattern",
          DEFINITIONS["anti_patterns"]["random_selection"]["type"])]
     ),
