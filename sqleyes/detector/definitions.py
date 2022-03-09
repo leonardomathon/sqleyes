@@ -8,6 +8,9 @@ DEFINITIONS = {
         },
         "implicit_columns": {
             "type": "Implicit Columns"
+        },
+        "random_selection": {
+            "type": "Random Selection"
         }
     }
 }
