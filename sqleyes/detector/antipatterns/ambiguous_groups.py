@@ -2,6 +2,7 @@
 import re
 
 from sqleyes.detector.antipatterns.abstract_base_class import AbstractDetector
+from sqleyes.detector.definitions import DEFINITIONS
 from sqleyes.detector.detector_output import DetectorOutput
 from sqleyes.utils.query_functions import (check_single_value_rule,
                                            get_columns_from_group_by_statement,
@@ -9,7 +10,8 @@ from sqleyes.utils.query_functions import (check_single_value_rule,
 
 
 class AmbiguousGroupsDetector(AbstractDetector):
-    type = "Ambiguous Groups"
+    
+    type = DEFINITIONS["anti_patterns"]["ambiguous_groups"]["type"]
 
     def __init__(self, query):
         super().__init__(query)
