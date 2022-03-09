@@ -1,9 +1,9 @@
 """Detector class running various detectors"""
 from typing import List
-from sqleyes.detector.ambiguous_groups_ap import AmbiguousGroupsAPDetector
+from sqleyes.detector.antipatterns.ambiguous_groups import AmbiguousGroupsAPDetector
+from sqleyes.detector.antipatterns.fear_of_the_unknown import FearOfTheUnknownApDetector
+from sqleyes.detector.antipatterns.implicit_columns import ImplicitColumnsAPDetector
 from sqleyes.detector.detector_output import DetectorOutput
-from sqleyes.detector.fear_of_the_unknown_ap import FearOfTheUnknownApDetector
-from sqleyes.detector.implicit_columns_ap import ImplicitColumnsAPDetector
 
 
 class Detector:

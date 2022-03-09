@@ -1,7 +1,7 @@
 """Ambiguous Groups anti-pattern detector class"""
 import re
 
-from sqleyes.detector.abstract_ap import APDetector
+from sqleyes.detector.antipatterns.abstract_base_class import APDetector
 from sqleyes.detector.detector_output import DetectorOutput
 from sqleyes.utils.query_functions import (check_single_value_rule,
                                            get_columns_from_group_by_statement,
