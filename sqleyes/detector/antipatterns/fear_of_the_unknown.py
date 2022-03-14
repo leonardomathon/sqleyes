@@ -18,7 +18,8 @@ class FearOfTheUnknownDetector(AbstractDetector):
                     re.compile(r'=\s*NULL', re.IGNORECASE)]
         for pattern in patterns:
             if pattern.search(self.query):
-                return DetectorOutput(detector_type=self.detector_type,
+                return DetectorOutput(certainty="high",
+                                      detector_type=self.detector_type,
                                       type=self.type)
 
         return None
