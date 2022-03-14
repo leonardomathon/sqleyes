@@ -14,6 +14,9 @@ DEFINITIONS = {
         },
         "random_selection": {
             "type": "Random Selection"
+        },
+        "spaghetti_query": {
+            "type": "Spaghetti Query"
         }
     }
 }

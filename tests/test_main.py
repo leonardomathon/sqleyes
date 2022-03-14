@@ -238,3 +238,13 @@ def test_main_random_selection(test_input, expected):
 ])
 def test_main_poor_mans_search_engine(test_input, expected):
     assert main(test_input) == expected
+
+
+@pytest.mark.parametrize("test_input, expected", [
+    (
+        "SELECT pId FROM product ORDER BY price",
+        []
+    ),
+])
+def test_main_poor_mans_search_engine(test_input, expected):
+    assert main(test_input) == expected

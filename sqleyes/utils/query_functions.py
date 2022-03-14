@@ -7,6 +7,13 @@ import sqlparse
 from sqleyes.utils.query_keywords import SQL_FUNCTIONS
 
 
+def get_query_complexity(query: str) -> int:
+    # Calculate the complexity of a query based of of some procedure
+    # https://stackoverflow.com/questions/3353634/measuring-the-complexity-of-sql-statements
+
+    # Could also format query using SQLParse and then count LoC
+    return 0
+
 def get_columns_from_select_statement(query: str) -> List[str]:
     """
     This function takes a query string as input and returns a list of columns
