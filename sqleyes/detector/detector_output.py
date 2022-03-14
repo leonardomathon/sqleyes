@@ -1,5 +1,6 @@
 """Detector Ouput class specifying general output format"""
 import json
+from typing import Literal
 
 
 class DetectorOutput:
@@ -7,13 +8,14 @@ class DetectorOutput:
     This class represents the output of a detector.
 
     Attributes:
-        certainty (int): The certainty of the detector detecting the AP.
+        certainty (str): The certainty of the detector detecting the AP.
         detector_type (str): The type of detector that produced this output.
         type (str): The type of output.
     """
-    def __init__(self, certainty: int, detector_type: str, type: str):
+    def __init__(self, certainty: Literal["low", "medium", "high"], 
+                 detector_type: str, type: str):
         # Clamp certainty between 0 and 1
-        self.certainty = sorted([0, certainty, 100])[1]
+        self.certainty = certainty
         self.detector_type = detector_type
         self.type = type
 
