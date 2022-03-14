@@ -3,6 +3,7 @@ from typing import List
 from sqleyes.detector.antipatterns.ambiguous_groups import AmbiguousGroupsDetector
 from sqleyes.detector.antipatterns.fear_of_the_unknown import FearOfTheUnknownDetector
 from sqleyes.detector.antipatterns.implicit_columns import ImplicitColumnsDetector
+from sqleyes.detector.antipatterns.poor_mans_search_engine import PoorMansSearchEngineDetector
 from sqleyes.detector.antipatterns.random_selection import RandomSelectionDetector
 from sqleyes.detector.detector_output import DetectorOutput
 
@@ -38,6 +39,10 @@ class Detector:
 
         ap_implicit_col = ImplicitColumnsDetector(query=self.query).check()
         self.anti_pattern_list.append(ap_implicit_col)
+
+        ap_pm_search_engine = PoorMansSearchEngineDetector(query=self.query) \
+            .check()
+        self.anti_pattern_list.append(ap_pm_search_engine)
 
         ap_random_selection = RandomSelectionDetector(query=self.query).check()
         self.anti_pattern_list.append(ap_random_selection)
