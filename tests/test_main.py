@@ -229,8 +229,8 @@ def test_main_random_selection(test_input, expected):
          DEFINITIONS["anti_patterns"]["poor_mans_search_engine"]["type"])]
     ),
     (
-        """SELECT pId 
-           FROM product 
+        """SELECT pId
+           FROM product
            WHERE description REGEXP '[[:<:]]ice[[:>:]]';""",
         [DetectorOutput("anti-pattern",
          DEFINITIONS["anti_patterns"]["poor_mans_search_engine"]["type"])]
