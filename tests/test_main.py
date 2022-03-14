@@ -196,3 +196,45 @@ def test_main_ambiguous_groups(test_input, expected):
 ])
 def test_main_random_selection(test_input, expected):
     assert main(test_input) == expected
+
+
+@pytest.mark.parametrize("test_input, expected", [
+    (
+        "SELECT pId FROM product ORDER BY price",
+        []
+    ),
+    (
+        "SELECT pId FROM product WHERE description LIKE '%ice%';",
+        [DetectorOutput("anti-pattern",
+         DEFINITIONS["anti_patterns"]["poor_mans_search_engine"]["type"])]
+    ),
+    (
+        "SELECT pId FROM product WHERE description like '%ice%';",
+        [DetectorOutput("anti-pattern",
+         DEFINITIONS["anti_patterns"]["poor_mans_search_engine"]["type"])]
+    ),
+    (
+        "SELECT pId FROM product WHERE description like    '%ice%';",
+        [DetectorOutput("anti-pattern",
+         DEFINITIONS["anti_patterns"]["poor_mans_search_engine"]["type"])]
+    ),
+    (
+        "SELECT pId FROM product WHERE description REGEXP 'ice';",
+        [DetectorOutput("anti-pattern",
+         DEFINITIONS["anti_patterns"]["poor_mans_search_engine"]["type"])]
+    ),
+    (
+        "SELECT pId FROM product WHERE description LIKE '%ice%';",
+        [DetectorOutput("anti-pattern",
+         DEFINITIONS["anti_patterns"]["poor_mans_search_engine"]["type"])]
+    ),
+    (
+        """SELECT pId
+           FROM product
+           WHERE description REGEXP '[[:<:]]ice[[:>:]]';""",
+        [DetectorOutput("anti-pattern",
+         DEFINITIONS["anti_patterns"]["poor_mans_search_engine"]["type"])]
+    ),
+])
+def test_main_poor_mans_search_engine(test_input, expected):
+    assert main(test_input) == expected
