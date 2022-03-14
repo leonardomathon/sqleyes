@@ -12,7 +12,7 @@ class DetectorOutput:
         detector_type (str): The type of detector that produced this output.
         type (str): The type of output.
     """
-    def __init__(self, certainty: Literal["low", "medium", "high"], 
+    def __init__(self, certainty: Literal["low", "medium", "high"],
                  detector_type: str, type: str):
         # Clamp certainty between 0 and 1
         self.certainty = certainty

@@ -33,7 +33,8 @@ class AmbiguousGroupsDetector(AbstractDetector):
             single_values = check_single_value_rule(remaining_columns)
 
             if not single_values:
-                return DetectorOutput(detector_type=self.detector_type,
+                return DetectorOutput(certainty="high",
+                                      detector_type=self.detector_type,
                                       type=self.type)
 
             return None

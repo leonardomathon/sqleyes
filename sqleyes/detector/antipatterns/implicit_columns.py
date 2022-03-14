@@ -16,7 +16,8 @@ class ImplicitColumnsDetector(AbstractDetector):
         pattern = re.compile("(SELECT\\s+\\*)", re.IGNORECASE)
 
         if pattern.search(self.query):
-            return DetectorOutput(detector_type=self.detector_type,
+            return DetectorOutput(certainty="high",
+                                  detector_type=self.detector_type,
                                   type=self.type)
 
         return None
