@@ -13,7 +13,7 @@ class PoorMansSearchEngineDetector(AbstractDetector):
         super().__init__(query)
 
     def check(self):
-        patterns = [re.compile("(LIKE)", re.IGNORECASE), 
+        patterns = [re.compile("(LIKE)", re.IGNORECASE),
                     re.compile("(REGEXP)", re.IGNORECASE)]
 
         for pattern in patterns:
