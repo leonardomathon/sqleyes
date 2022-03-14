@@ -9,6 +9,9 @@ DEFINITIONS = {
         "implicit_columns": {
             "type": "Implicit Columns"
         },
+        "poor_mans_search_engine": {
+            "type": "Poor Man's Search Engine"
+        },
         "random_selection": {
             "type": "Random Selection"
         }
