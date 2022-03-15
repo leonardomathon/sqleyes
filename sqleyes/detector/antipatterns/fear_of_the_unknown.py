@@ -8,6 +8,7 @@ from sqleyes.detector.detector_output import DetectorOutput
 class FearOfTheUnknownDetector(AbstractDetector):
 
     type = DEFINITIONS["anti_patterns"]["fear_of_the_unknown"]["type"]
+    title = DEFINITIONS["anti_patterns"]["fear_of_the_unknown"]["title"]
 
     def __init__(self, query):
         super().__init__(query)
@@ -20,6 +21,7 @@ class FearOfTheUnknownDetector(AbstractDetector):
             if pattern.search(self.query):
                 return DetectorOutput(certainty="high",
                                       detector_type=self.detector_type,
+                                      title=self.title,
                                       type=self.type)
 
         return None

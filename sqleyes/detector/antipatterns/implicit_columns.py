@@ -8,6 +8,7 @@ from sqleyes.detector.detector_output import DetectorOutput
 class ImplicitColumnsDetector(AbstractDetector):
 
     type = DEFINITIONS["anti_patterns"]["implicit_columns"]["type"]
+    title = DEFINITIONS["anti_patterns"]["implicit_columns"]["title"]
 
     def __init__(self, query):
         super().__init__(query)
@@ -18,6 +19,7 @@ class ImplicitColumnsDetector(AbstractDetector):
         if pattern.search(self.query):
             return DetectorOutput(certainty="high",
                                   detector_type=self.detector_type,
+                                  title=self.title,
                                   type=self.type)
 
         return None

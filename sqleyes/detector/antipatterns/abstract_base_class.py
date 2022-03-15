@@ -18,6 +18,7 @@ class AbstractDetector(ABC):
     """
 
     type: str = NotImplemented
+    title: str = NotImplemented
 
     @abstractmethod
     def __init__(self, query):

@@ -8,6 +8,7 @@ from sqleyes.detector.detector_output import DetectorOutput
 class PoorMansSearchEngineDetector(AbstractDetector):
 
     type = DEFINITIONS["anti_patterns"]["poor_mans_search_engine"]["type"]
+    title = DEFINITIONS["anti_patterns"]["poor_mans_search_engine"]["title"]
 
     def __init__(self, query):
         super().__init__(query)
@@ -20,6 +21,7 @@ class PoorMansSearchEngineDetector(AbstractDetector):
             if pattern.search(self.query):
                 return DetectorOutput(certainty="medium",
                                       detector_type=self.detector_type,
+                                      title=self.title,
                                       type=self.type)
 
         return None
