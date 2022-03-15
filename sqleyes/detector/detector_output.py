@@ -2,7 +2,7 @@
 import json
 
 
-class DetectorOutput:
+class DetectorOutput(object):
     """
     This class represents the output of a detector.
 
@@ -18,6 +18,7 @@ class DetectorOutput:
         self.certainty = certainty
         self.detector_type = detector_type
         self.type = type
+        self.dict = self.__create_dictionary()
 
     def __create_dictionary(self):
         return {
@@ -25,6 +26,9 @@ class DetectorOutput:
             "detector_type": self.detector_type,
             "type": self.type
         }
+
+    def __getitem__(self, item):
+         return self.dict[item]
 
     def __repr__(self):
         return json.dumps(self.__create_dictionary())

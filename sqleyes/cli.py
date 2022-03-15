@@ -2,6 +2,7 @@
 import argparse
 
 from sqleyes.main import main
+from sqleyes.printer.printer import IntroPrinter, OutputPrinter
 
 
 parser = argparse.ArgumentParser(
@@ -14,8 +15,12 @@ args = parser.parse_args()
 
 
 def cli():
-    print(main(args.query))
+    IntroPrinter(args.query).print()
+    output = main(args.query)
+    OutputPrinter(output).print()
 
 
 if __name__ == '__main__':
-    print(main(args.query))
+    IntroPrinter(args.query).print()
+    output = main(args.query)
+    OutputPrinter(output).print()
