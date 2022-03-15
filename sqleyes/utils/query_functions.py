@@ -4,15 +4,9 @@ from typing import List
 
 import sqlparse
 
+from sqleyes.utils.code_complexity_metrics import halstead_metrics
 from sqleyes.utils.query_keywords import SQL_FUNCTIONS
-
-
-def get_query_complexity(query: str) -> int:
-    # Calculate the complexity of a query based of of some procedure
-    # https://stackoverflow.com/questions/3353634/measuring-the-complexity-of-sql-statements
-
-    # Could also format query using SQLParse and then count LoC
-    return 0
+  
 
 def get_columns_from_select_statement(query: str) -> List[str]:
     """
@@ -73,6 +67,34 @@ def get_columns_from_group_by_statement(query: str) -> List[str]:
             group_columns.append(item.get_name())
 
     return group_columns
+
+
+def get_columns_from_where_statement(query: str) -> List[str]:
+    pass
+
+def get_query_complexity(query: str) -> int:
+    """
+    Calculates the complexity of a query based on the Halstead Metric + LoC
+
+    Parameters:
+        query (str): A SQL query string.
+
+    Returns:
+        int: The complexity of the query
+    """
+
+    # TODO
+    # From paper 'Measuring Query Complexity in SQLShare Workload'
+    # Number of operators and expressions as Halstead operators
+    operators = []
+
+    # Number of columns referenced in query as Halstead operants
+    operands = []
+
+    N1, N2 = len(operators), len(operands)
+    n1, n2 = len(set(operators)), len(set(operands))
+
+    return halstead_metrics(n1, n2, N1, N2)[4]
 
 
 def check_single_value_rule(columns: List[str]) -> bool:
