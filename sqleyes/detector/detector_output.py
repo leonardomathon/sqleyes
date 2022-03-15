@@ -25,7 +25,7 @@ class DetectorOutput(object):
         return {
             "certainty": self.certainty,
             "detector_type": self.detector_type,
-            "tittle": self.title,
+            "title": self.title,
             "type": self.type
         }
 
