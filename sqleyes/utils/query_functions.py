@@ -132,7 +132,7 @@ def get_query_complexity(query: str) -> int:
     operators = []
 
     # Number of columns referenced in query as Halstead operants
-    operands = []
+    operands = get_all_columns(query)
 
     N1, N2 = len(operators), len(operands)
     n1, n2 = len(set(operators)), len(set(operands))
