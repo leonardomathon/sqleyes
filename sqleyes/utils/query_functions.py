@@ -6,7 +6,7 @@ import sqlparse
 
 from sqleyes.utils.code_complexity_metrics import halstead_metrics
 from sqleyes.utils.query_keywords import SQL_FUNCTIONS
-  
+
 
 def get_columns_from_select_statement(query: str) -> List[str]:
     """
@@ -114,6 +114,7 @@ def get_all_columns(query: str) -> List[str]:
     order_by_columns = get_columns_from_order_by_statement(query)
 
     return select_columns + group_by_columns + order_by_columns
+
 
 def get_query_complexity(query: str) -> int:
     """

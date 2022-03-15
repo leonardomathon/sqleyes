@@ -246,5 +246,5 @@ def test_main_poor_mans_search_engine(test_input, expected):
         []
     ),
 ])
-def test_main_poor_mans_search_engine(test_input, expected):
+def test_main_spaghetti_query(test_input, expected):
     assert main(test_input) == expected

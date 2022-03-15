@@ -153,7 +153,6 @@ def test_get_columns_from_order_by_statement(test_input, expected):
         ORDER BY pCat ASC""",
         ["pId", "pCat", "pCat"]
     ),
-    
 ])
 def test_get_all_columns(test_input, expected):
     assert get_all_columns(test_input) == expected
