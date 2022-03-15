@@ -9,6 +9,7 @@ class DetectorOutput(object):
     Attributes:
         certainty (str): The certainty of the detector detecting the AP.
         detector_type (str): The type of detector that produced this output.
+        title (str): The title of output.
         type (str): The type of output.
     """
     def __init__(self, certainty: str, detector_type: str, title: str, type: str):
