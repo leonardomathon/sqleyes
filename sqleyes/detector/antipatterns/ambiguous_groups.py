@@ -11,6 +11,7 @@ from sqleyes.utils.query_functions import (check_single_value_rule,
 
 class AmbiguousGroupsDetector(AbstractDetector):
 
+    filename = DEFINITIONS["anti_patterns"]["ambiguous_groups"]["filename"]
     type = DEFINITIONS["anti_patterns"]["ambiguous_groups"]["type"]
     title = DEFINITIONS["anti_patterns"]["ambiguous_groups"]["title"]
 
@@ -35,6 +36,7 @@ class AmbiguousGroupsDetector(AbstractDetector):
 
             if not single_values:
                 return DetectorOutput(certainty="high",
+                                      description=super().get_description(),
                                       detector_type=self.detector_type,
                                       title=self.title,
                                       type=self.type)

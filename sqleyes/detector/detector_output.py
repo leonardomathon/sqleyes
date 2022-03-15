@@ -12,11 +12,13 @@ class DetectorOutput(object):
         title (str): The title of output.
         type (str): The type of output.
     """
-    def __init__(self, certainty: str, detector_type: str, title: str, type: str):
+    def __init__(self, certainty: str, description: str, detector_type: str, 
+                 title: str, type: str):
         if certainty not in ["low", "medium", "high"]:
             raise Exception("Certainty must be specified as either 'low', \
                              'medium' or 'high' ")
         self.certainty = certainty
+        self.description = description
         self.detector_type = detector_type
         self.title = title
         self.type = type
@@ -25,6 +27,7 @@ class DetectorOutput(object):
     def __create_dictionary(self):
         return {
             "certainty": self.certainty,
+            "description": self.description,
             "detector_type": self.detector_type,
             "title": self.title,
             "type": self.type
