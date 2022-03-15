@@ -50,11 +50,12 @@ class OutputPrinter(AbstractPrinter):
         table = Table(title=f"[bold cyan]Summary of analysis[/bold cyan] \nFound {len(self.detector_output)} errors in the given query", title_justify="left")
 
         table.add_column("Error", justify="right", style="cyan", no_wrap=True)
+        table.add_column("Title", style="red")
         table.add_column("Type", style="red")
         table.add_column("Certainty", justify="right", style="green")
 
         for output in self.detector_output:
-            table.add_row(output["detector_type"], output["type"], output["certainty"])
+            table.add_row(output["detector_type"], output["title"], output["type"], output["certainty"])
 
         self.console.print(table)
 
@@ -63,12 +64,14 @@ class OutputPrinter(AbstractPrinter):
 
         for output in self.detector_output:
             type = output["type"]
+            title = output["title"]
             filename = output["type"].replace(" ", "_").replace("'", "").lower()
 
             self.console.print("-"*10, style="underline")
 
             with open(pkg_resources.resource_filename("sqleyes.definitions", f"antipatterns/{filename}.md"), "r+") as definition:
                 self.console.print(f"[bold red]type[/bold red]: {type}")
+                self.console.print(f"[bold red]title[/bold red]: {title}")
                 self.console.print("[bold red]Description[/bold red]:")
                 self.console.print(Padding(Markdown(definition.read()), (1, 2)))
                 self.console.print("-"*10, style="underline")
