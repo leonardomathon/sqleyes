@@ -32,6 +32,5 @@ class AbstractDetector(ABC):
         pass
 
     def get_description(self):
-        return load_description("sqleyes.definitions", "antipatterns/", 
+        return load_description("sqleyes.definitions", "antipatterns/",
                                 self.filename)
-        

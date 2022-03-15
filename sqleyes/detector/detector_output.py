@@ -12,7 +12,7 @@ class DetectorOutput(object):
         title (str): The title of output.
         type (str): The type of output.
     """
-    def __init__(self, certainty: str, description: str, detector_type: str, 
+    def __init__(self, certainty: str, description: str, detector_type: str,
                  title: str, type: str):
         if certainty not in ["low", "medium", "high"]:
             raise Exception("Certainty must be specified as either 'low', \
