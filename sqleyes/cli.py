@@ -1,6 +1,5 @@
 # Setup argument parser
 import argparse
-from pydoc import describe
 
 from sqleyes.main import main
 from sqleyes.printer.printer import IntroPrinter, OutputPrinter
@@ -12,7 +11,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument('-q', '--query', metavar="", type=str, required=True,
                     help="A raw SQL query to analyze")
 
-parser.add_argument('-d' ,'--description', action="store_true", 
+parser.add_argument('-d', '--description', action="store_true",
                     help="Show descriptions of found errors")
 
 parser.set_defaults(description=False)

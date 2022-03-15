@@ -28,7 +28,7 @@ class DetectorOutput(object):
         }
 
     def __getitem__(self, item):
-         return self.dict[item]
+        return self.dict[item]
 
     def __repr__(self):
         return json.dumps(self.__create_dictionary())
