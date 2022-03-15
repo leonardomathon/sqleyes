@@ -1,7 +1,7 @@
 """Tests for sqleyes.utils.query_functions"""
 import pytest
 
-from sqleyes.utils.query_functions import (check_single_value_rule,
+from sqleyes.utils.query_functions import (check_single_value_rule, get_columns_from_order_by_statement,
                                            get_columns_from_select_statement,
                                            get_columns_from_group_by_statement)
 
@@ -82,3 +82,48 @@ def test_get_columns_from_group_by_statement(test_input, expected):
 ])
 def test_check_single_value_rule(test_input, expected):
     assert check_single_value_rule(test_input) == expected
+
+
+@pytest.mark.parametrize("test_input, expected", [
+    (
+        "SELECT * FROM product WHERE pId > 10",
+        []
+    ),
+    (
+        "SELECT * FROM product WHERE pId > 10 ORDER BY price",
+        ["price"]
+    ),
+    (
+        "SELECT * FROM product WHERE pId > 10 order by price",
+        ["price"]
+    ),
+    (
+        "SELECT * FROM product WHERE pId > 10 order BY price",
+        ["price"]
+    ),
+    (
+        "SELECT * FROM product WHERE pId > 10 ORDER BY    price  ,    state",
+        ["price", "state"]
+    ),
+    (
+        "SELECT * FROM product WHERE pId > 10 ORDER BY price ASC",
+        ["price"]
+    ),
+    (
+        "SELECT * FROM product WHERE pId > 10 ORDER BY price DESC",
+        ["price"]
+    ),
+    (
+        """SELECT * 
+        FROM product 
+        WHERE pId > 10 
+        ORDER BY price DESC 
+        UNION
+        FROM product 
+        WHERE price > 9.99 
+        """,
+        ["price"]
+    ),
+])
+def test_get_columns_from_order_by_statement(test_input, expected):
+    assert get_columns_from_order_by_statement(test_input) == expected

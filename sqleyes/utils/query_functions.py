@@ -17,7 +17,7 @@ def get_columns_from_select_statement(query: str) -> List[str]:
         query (str): The query string.
 
     Returns:
-        columns (list): A list of columns selected in the SELECT statement.
+        List[str]: A list of columns selected in the SELECT statement.
     """
     columns = re.findall(r'SELECT (.*?) FROM', query,
                          flags=re.DOTALL | re.IGNORECASE)
@@ -69,8 +69,51 @@ def get_columns_from_group_by_statement(query: str) -> List[str]:
     return group_columns
 
 
-def get_columns_from_where_statement(query: str) -> List[str]:
-    pass
+def get_columns_from_order_by_statement(query: str) -> List[str]:
+    """
+    This function takes a query string as input and returns a list of columns
+    in the ORDER BY statement.
+
+    Parameters:
+        query (str): The query string.
+
+    Returns:
+        List[str]: A list of columns selected in the SELECT statement.
+    """
+    tokens = sqlparse.parse(query)[0].tokens
+
+    # Find index of group by keyword in tokens
+    for i in range(0, len(tokens)):
+        if tokens[i].value.upper() == "ORDER BY":
+            break
+
+    # Query has no GROUP BY statement
+    if i == len(tokens) - 1:
+        return []
+
+    # Find possible index of next keyword
+    for j in range(i + 1, len(tokens)):
+        if tokens[j].ttype is sqlparse.tokens.Keyword:
+            break
+
+    # Get column names
+    order_columns = []
+    for item in tokens[i:j + 1]:
+        if isinstance(item, sqlparse.sql.IdentifierList):
+            for identifier in item.get_identifiers():
+                order_columns.append(identifier.get_name())
+        elif isinstance(item, sqlparse.sql.Identifier):
+            order_columns.append(item.get_name())
+
+    return order_columns
+
+
+def get_all_columns(query: str) -> List[str]:
+    select_columns = get_columns_from_select_statement(query)
+    group_by_columns = get_columns_from_group_by_statement(query)
+    order_by_columns = get_columns_from_order_by_statement(query)
+
+    return select_columns + group_by_columns + order_by_columns
 
 def get_query_complexity(query: str) -> int:
     """
