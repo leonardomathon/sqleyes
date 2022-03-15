@@ -1,6 +1,6 @@
 """Tests for sqleyes.main"""
 import pytest
-from sqleyes.detector.definitions import DEFINITIONS
+from sqleyes.definitions.definitions import DEFINITIONS
 from sqleyes.detector.detector_output import DetectorOutput
 
 from sqleyes.main import main

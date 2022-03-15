@@ -1,7 +1,7 @@
 """Fear of the Unknown anti-pattern detector class"""
 import re
 from sqleyes.detector.antipatterns.abstract_base_class import AbstractDetector
-from sqleyes.detector.definitions import DEFINITIONS
+from sqleyes.definitions.definitions import DEFINITIONS
 from sqleyes.detector.detector_output import DetectorOutput
 
 
