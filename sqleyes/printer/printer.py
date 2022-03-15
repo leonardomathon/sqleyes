@@ -8,7 +8,6 @@ from rich.console import Console
 from rich.layout import Layout
 from rich.markdown import Markdown
 from rich.padding import Padding
-from rich.progress import track
 from rich.table import Table
 from sqleyes.detector.detector_output import DetectorOutput
 
@@ -62,17 +61,25 @@ class OutputPrinter(AbstractPrinter):
         
         self.console.print(table)
 
-    def print_detailed_analysis(self):
-        self.console.print(f"[bold cyan]Detailed analysis[/bold cyan]")
+    def print_descriptions(self):
+        self.console.print(f"[bold cyan]Detailed descriptions of found errors[/bold cyan]")
 
         for output in self.detector_output:
-            type = output["type"].replace(" ", "_").replace("'", "").lower()
+            type = output["type"]
+            filename = output["type"].replace(" ", "_").replace("'", "").lower()
 
-            with open(pkg_resources.resource_filename("sqleyes.definitions", f"antipatterns/{type}.md"), "r+") as definition:
-                self.console.print(Markdown(definition.read()))
+            self.console.print("-"*10, style="underline")
 
-    def print(self):
+            with open(pkg_resources.resource_filename("sqleyes.definitions", f"antipatterns/{filename}.md"), "r+") as definition:
+                self.console.print(f"[bold red]type[/bold red]: {type}")
+                self.console.print(f"[bold red]Description[/bold red]:")
+                self.console.print(Padding(Markdown(definition.read()), (1,2)))
+                self.console.print("-"*10, style="underline")
+                
+
+    def print(self, descriptions=False):
         self.print_summary()
-        self.console.print()
-        self.print_detailed_analysis()
+        if descriptions:
+            self.console.print()
+            self.print_descriptions()
         
