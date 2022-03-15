@@ -1,19 +1,24 @@
 DEFINITIONS = {
     "anti_patterns": {
         "ambiguous_groups": {
-            "type": "Ambiguous Groups",
+            "title": "Incorrect GROUP BY usage",
+            "type": "Ambiguous Groups"
         },
         "fear_of_the_unknown": {
-            "type": "Fear of the Unknown",
+            "title": "Incorrect NULL usage",
+            "type": "Fear of the Unknown"
         },
         "implicit_columns": {
-            "type": "Implicit Columns",
+            "title": "Avoid usage of wildcard selector",
+            "type": "Implicit Columns"
         },
         "poor_mans_search_engine": {
-            "type": "Poor Man's Search Engine",
+            "title": "Avoid pattern matching",
+            "type": "Poor Man's Search Engine"
         },
         "random_selection": {
-            "type": "Random Selection",
+            "title": "Avoid ORDER BY RAND() usage",
+            "type": "Random Selection"
         }
     }
 }
