@@ -18,12 +18,18 @@ class PoorMansSearchEngineDetector(AbstractDetector):
         patterns = [re.compile("(LIKE)", re.IGNORECASE),
                     re.compile("(REGEXP)", re.IGNORECASE)]
 
+        locations = []
+
         for pattern in patterns:
-            if pattern.search(self.query):
-                return DetectorOutput(certainty="medium",
-                                      description=super().get_description(),
-                                      detector_type=self.detector_type,
-                                      title=self.title,
-                                      type=self.type)
+            for match in pattern.finditer(self.query):
+                locations.append(match.span())  
+                
+        if len(locations) > 0:
+            return DetectorOutput(certainty="medium",
+                                  description=super().get_description(),
+                                  detector_type=self.detector_type,
+                                  location=locations,
+                                  title=self.title,
+                                  type=self.type)
 
         return None

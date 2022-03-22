@@ -17,10 +17,17 @@ class ImplicitColumnsDetector(AbstractDetector):
     def check(self):
         pattern = re.compile("(SELECT\\s+\\*)", re.IGNORECASE)
 
-        if pattern.search(self.query):
+        locations = []
+
+        for match in pattern.finditer(self.query):
+            locations.append(match.span())  
+
+        
+        if len(locations) > 0:
             return DetectorOutput(certainty="high",
                                   description=super().get_description(),
                                   detector_type=self.detector_type,
+                                  location=locations,
                                   title=self.title,
                                   type=self.type)
 

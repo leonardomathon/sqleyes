@@ -48,8 +48,7 @@ class OutputPrinter(AbstractPrinter):
 
     def print_summary(self):
         table = Table(
-            title=f"""[bold cyan]Summary of analysis[/bold cyan] \n
-            Found {len(self.detector_output)} errors in the given query""",
+            title=f"""[bold cyan]Summary of analysis[/bold cyan] \nFound {len(self.detector_output)} errors in the given query""",
             title_justify="left")
 
         table.add_column("Error", justify="right", style="cyan", no_wrap=True)
@@ -57,13 +56,12 @@ class OutputPrinter(AbstractPrinter):
         table.add_column("Type", style="red")
         table.add_column("Certainty", justify="right", style="green")
         table.add_column("Location", justify="right")
-
         for output in self.detector_output:
             table.add_row(output["detector_type"],
                           output["title"],
                           output["type"],
                           output["certainty"],
-                          str(output["location"]))
+                          str(output["location"]).replace("[", "").replace("]", ""))
 
         self.console.print(table)
 

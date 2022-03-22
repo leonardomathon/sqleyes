@@ -1,6 +1,6 @@
 """Detector Ouput class specifying general output format"""
 import json
-from typing import Tuple
+from typing import List, Tuple
 
 
 class DetectorOutput(object):
@@ -14,7 +14,7 @@ class DetectorOutput(object):
         type (str): The type of output.
     """
     def __init__(self, certainty: str, description: str, detector_type: str,
-                 location: Tuple[int, int], title: str, type: str):
+                 location: List[Tuple[int, int]], title: str, type: str):
         if certainty not in ["low", "medium", "high"]:
             raise Exception("Certainty must be specified as either 'low', \
                              'medium' or 'high' ")

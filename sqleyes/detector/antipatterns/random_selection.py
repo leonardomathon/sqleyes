@@ -18,11 +18,17 @@ class RandomSelectionDetector(AbstractDetector):
         patterns = [re.compile("(ORDER\\s+BY\\s+RAND\\s*())", re.IGNORECASE),
                     re.compile("(ORDER\\s+BY\\s+RANDOM\\s*())", re.IGNORECASE)]
 
+        locations = []
+
         for pattern in patterns:
-            if pattern.search(self.query):
-                return DetectorOutput(certainty="high",
-                                      description=super().get_description(),
-                                      detector_type=self.detector_type,
-                                      title=self.title,
-                                      type=self.type)
+            for match in pattern.finditer(self.query):
+                locations.append(match.span())  
+
+        if len(locations) > 0:
+            return DetectorOutput(certainty="high",
+                                  description=super().get_description(),
+                                  detector_type=self.detector_type,
+                                  location=locations,
+                                  title=self.title,
+                                  type=self.type)
         return None
