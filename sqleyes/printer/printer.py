@@ -65,22 +65,28 @@ class OutputPrinter(AbstractPrinter):
 
         self.console.print(table)
 
+    def print_line(self):
+        self.console.print("-" * 10)
+
     def print_descriptions(self):
         self.console.print("[bold cyan]Detailed descriptions of found errors[/bold cyan]")
+
+        self.print_line()
 
         for output in self.detector_output:
             type = output["type"]
             title = output["title"]
             filename = output["type"].replace(" ", "_").replace("'", "").lower()
 
-            self.console.print("-"*10, style="underline")
+            
 
             with open(pkg_resources.resource_filename("sqleyes.definitions", f"antipatterns/{filename}.md"), "r+") as definition:
+                self.console.print()
                 self.console.print(f"[bold red]type[/bold red]: {type}")
                 self.console.print(f"[bold red]title[/bold red]: {title}")
                 self.console.print("[bold red]Description[/bold red]:")
                 self.console.print(Padding(Markdown(definition.read()), (1, 2)))
-                self.console.print("-"*10, style="underline")
+                self.print_line()
 
     def print(self, descriptions=False):
         self.print_summary()
