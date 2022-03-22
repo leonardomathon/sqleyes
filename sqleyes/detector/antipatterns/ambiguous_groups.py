@@ -39,7 +39,7 @@ class AmbiguousGroupsDetector(AbstractDetector):
                                       certainty="high",
                                       description=super().get_description(),
                                       detector_type=self.detector_type,
-                                      locations=(),
+                                      locations=[(0, 0)],
                                       title=self.title,
                                       type=self.type)
 

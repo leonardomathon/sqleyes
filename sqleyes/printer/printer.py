@@ -6,7 +6,6 @@ import sqlparse
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.padding import Padding
-from rich.panel import Panel
 from rich.table import Table
 from sqleyes.detector.detector_output import DetectorOutput
 
@@ -90,7 +89,7 @@ class OutputPrinter(AbstractPrinter):
 
                 for snippet in location_snippets:
                     self.console.print(Padding(snippet, (2, 2, 1, 2)))
-                   
+
                 self.console.print("[bold red]description[/bold red]:")
                 self.console.print(Padding(Markdown(definition.read()), (1, 2)))
                 self.print_line()
