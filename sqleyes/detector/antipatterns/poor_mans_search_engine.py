@@ -22,14 +22,14 @@ class PoorMansSearchEngineDetector(AbstractDetector):
 
         for pattern in patterns:
             for match in pattern.finditer(self.query):
-                locations.append(match.span())  
-                
+                locations.append(match.span())
+
         if len(locations) > 0:
-            return DetectorOutput(certainty="medium",
+            return DetectorOutput(query=self.query,
+                                  certainty="medium",
                                   description=super().get_description(),
                                   detector_type=self.detector_type,
-                                  location=locations,
+                                  locations=locations,
                                   title=self.title,
                                   type=self.type)
-
         return None

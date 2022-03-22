@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import json
 from typing import List
 import pkg_resources
 import sqlparse
@@ -61,7 +62,7 @@ class OutputPrinter(AbstractPrinter):
                           output["title"],
                           output["type"],
                           output["certainty"],
-                          str(output["location"]).replace("[", "").replace("]", ""))
+                          str(output["locations"]).replace("[", "").replace("]", ""))
 
         self.console.print(table)
 
@@ -76,15 +77,22 @@ class OutputPrinter(AbstractPrinter):
         for output in self.detector_output:
             type = output["type"]
             title = output["title"]
+            locations = str(output["locations"]).replace("[", "").replace("]", "")
+            location_snippets = json.loads(output["location_snippets"])
             filename = output["type"].replace(" ", "_").replace("'", "").lower()
-
-            
 
             with open(pkg_resources.resource_filename("sqleyes.definitions", f"antipatterns/{filename}.md"), "r+") as definition:
                 self.console.print()
                 self.console.print(f"[bold red]type[/bold red]: {type}")
                 self.console.print(f"[bold red]title[/bold red]: {title}")
-                self.console.print("[bold red]Description[/bold red]:")
+                self.console.print(f"[bold red]location(s)[/bold red]: {locations}")
+
+                self.console.print()
+                for snippet in location_snippets:
+                    self.console.print(Padding(snippet, (1, 2)))
+                    self.console.print()
+
+                self.console.print("[bold red]description[/bold red]:")
                 self.console.print(Padding(Markdown(definition.read()), (1, 2)))
                 self.print_line()
 

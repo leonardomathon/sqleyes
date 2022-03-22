@@ -23,13 +23,14 @@ class FearOfTheUnknownDetector(AbstractDetector):
 
         for pattern in patterns:
             for match in pattern.finditer(self.query):
-                locations.append(match.span())  
+                locations.append(match.span())
 
         if len(locations) > 0:
-            return DetectorOutput(certainty="high",
+            return DetectorOutput(query=self.query,
+                                  certainty="high",
                                   description=super().get_description(),
                                   detector_type=self.detector_type,
-                                  location=locations,
+                                  locations=locations,
                                   title=self.title,
                                   type=self.type)
         return None
