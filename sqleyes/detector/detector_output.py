@@ -1,5 +1,6 @@
 """Detector Ouput class specifying general output format"""
 import json
+from typing import Tuple
 
 
 class DetectorOutput(object):
@@ -13,13 +14,14 @@ class DetectorOutput(object):
         type (str): The type of output.
     """
     def __init__(self, certainty: str, description: str, detector_type: str,
-                 title: str, type: str):
+                 location: Tuple[int, int], title: str, type: str):
         if certainty not in ["low", "medium", "high"]:
             raise Exception("Certainty must be specified as either 'low', \
                              'medium' or 'high' ")
         self.certainty = certainty
         self.description = description
         self.detector_type = detector_type
+        self.location = location
         self.title = title
         self.type = type
         self.dict = self.__create_dictionary()
@@ -29,6 +31,7 @@ class DetectorOutput(object):
             "certainty": self.certainty,
             "description": self.description,
             "detector_type": self.detector_type,
+            "location": self.location,
             "title": self.title,
             "type": self.type
         }
