@@ -43,6 +43,10 @@ class DetectorOutput(object):
 
             length = location[1] - location[0]
 
+            snippet.append("Query contains an ")
+            snippet.append(self.detector_type.title())
+            snippet.append(":\n\n")
+
             # Create query snippet
             if location[0] < length:
                 snippet.append(query[location[0]:location[1]+length])
