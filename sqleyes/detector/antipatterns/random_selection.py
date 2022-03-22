@@ -15,14 +15,21 @@ class RandomSelectionDetector(AbstractDetector):
         super().__init__(query)
 
     def check(self):
-        patterns = [re.compile("(ORDER\\s+BY\\s+RAND\\s*())", re.IGNORECASE),
-                    re.compile("(ORDER\\s+BY\\s+RANDOM\\s*())", re.IGNORECASE)]
+        patterns = [re.compile("(ORDER\\s+BY\\s+RAND\\s*\\()", re.IGNORECASE),
+                    re.compile("(ORDER\\s+BY\\s+RANDOM\\s*\\()", re.IGNORECASE)]
+
+        locations = []
 
         for pattern in patterns:
-            if pattern.search(self.query):
-                return DetectorOutput(certainty="high",
-                                      description=super().get_description(),
-                                      detector_type=self.detector_type,
-                                      title=self.title,
-                                      type=self.type)
+            for match in pattern.finditer(self.query):
+                locations.append(match.span())
+
+        if len(locations) > 0:
+            return DetectorOutput(query=self.query,
+                                  certainty="high",
+                                  description=super().get_description(),
+                                  detector_type=self.detector_type,
+                                  locations=locations,
+                                  title=self.title,
+                                  type=self.type)
         return None
