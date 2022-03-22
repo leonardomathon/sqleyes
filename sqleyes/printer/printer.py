@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import json
 from typing import List
 import pkg_resources
 import sqlparse
@@ -47,34 +48,51 @@ class OutputPrinter(AbstractPrinter):
         self.detector_output = detector_output
 
     def print_summary(self):
-        table = Table(title=f"[bold cyan]Summary of analysis[/bold cyan] \nFound {len(self.detector_output)} errors in the given query", title_justify="left")
+        table = Table(
+            title=f"""[bold cyan]Summary of analysis[/bold cyan] \nFound {len(self.detector_output)} errors in the given query""",
+            title_justify="left")
 
         table.add_column("Error", justify="right", style="cyan", no_wrap=True)
         table.add_column("Title", style="red")
         table.add_column("Type", style="red")
         table.add_column("Certainty", justify="right", style="green")
-
+        table.add_column("Location", justify="right")
         for output in self.detector_output:
-            table.add_row(output["detector_type"], output["title"], output["type"], output["certainty"])
+            table.add_row(output["detector_type"],
+                          output["title"],
+                          output["type"],
+                          output["certainty"],
+                          str(output["locations"]).replace("[", "").replace("]", ""))
 
         self.console.print(table)
+
+    def print_line(self):
+        self.console.print("-" * 10)
 
     def print_descriptions(self):
         self.console.print("[bold cyan]Detailed descriptions of found errors[/bold cyan]")
 
+        self.print_line()
+
         for output in self.detector_output:
             type = output["type"]
             title = output["title"]
+            locations = str(output["locations"]).replace("[", "").replace("]", "")
+            location_snippets = json.loads(output["location_snippets"])
             filename = output["type"].replace(" ", "_").replace("'", "").lower()
 
-            self.console.print("-"*10, style="underline")
-
             with open(pkg_resources.resource_filename("sqleyes.definitions", f"antipatterns/{filename}.md"), "r+") as definition:
+                self.console.print()
                 self.console.print(f"[bold red]type[/bold red]: {type}")
                 self.console.print(f"[bold red]title[/bold red]: {title}")
-                self.console.print("[bold red]Description[/bold red]:")
+                self.console.print(f"[bold red]location(s)[/bold red]: {locations}")
+
+                for snippet in location_snippets:
+                    self.console.print(Padding(snippet, (2, 2, 1, 2)))
+
+                self.console.print("[bold red]description[/bold red]:")
                 self.console.print(Padding(Markdown(definition.read()), (1, 2)))
-                self.console.print("-"*10, style="underline")
+                self.print_line()
 
     def print(self, descriptions=False):
         self.print_summary()
