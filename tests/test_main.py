@@ -1,10 +1,8 @@
 """Tests for sqleyes.main"""
 import pytest
 from sqleyes.definitions.definitions import DEFINITIONS
-from sqleyes.detector.detector_output import DetectorOutput
 
 from sqleyes.main import main
-from sqleyes.utils.load_file import load_description
 
 
 @pytest.mark.parametrize("test_input, expected", [
