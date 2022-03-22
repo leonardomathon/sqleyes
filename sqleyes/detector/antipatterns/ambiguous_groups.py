@@ -21,6 +21,11 @@ class AmbiguousGroupsDetector(AbstractDetector):
     def check(self):
         pattern = re.compile(r'GROUP\s*BY', re.IGNORECASE)
 
+        locations = []
+
+        for match in pattern.finditer(self.query):
+            locations.append(match.span())
+
         if pattern.search(self.query):
             # GROUP BY pattern is found in the query
 
@@ -39,7 +44,7 @@ class AmbiguousGroupsDetector(AbstractDetector):
                                       certainty="high",
                                       description=super().get_description(),
                                       detector_type=self.detector_type,
-                                      locations=[(0, 0)],
+                                      locations=locations,
                                       title=self.title,
                                       type=self.type)
 
