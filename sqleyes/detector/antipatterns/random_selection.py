@@ -15,8 +15,8 @@ class RandomSelectionDetector(AbstractDetector):
         super().__init__(query)
 
     def check(self):
-        patterns = [re.compile("(ORDER\\s+BY\\s+RAND\\s*\\(\\))", re.IGNORECASE),
-                    re.compile("(ORDER\\s+BY\\s+RANDOM\\s*\\(\\))", re.IGNORECASE)]
+        patterns = [re.compile("(ORDER\\s+BY\\s+RAND\\s*\\()", re.IGNORECASE),
+                    re.compile("(ORDER\\s+BY\\s+RANDOM\\s*\\()", re.IGNORECASE)]
 
         locations = []
 
