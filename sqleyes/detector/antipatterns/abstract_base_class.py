@@ -1,6 +1,8 @@
 """Abstract anti-pattern detector class"""
 from abc import ABC, abstractmethod
 
+from sqleyes.utils.load_file import load_description
+
 
 class AbstractDetector(ABC):
     """
@@ -16,8 +18,9 @@ class AbstractDetector(ABC):
         query : str
             The query to be searched for.
     """
-
+    filename: str = NotImplemented
     type: str = NotImplemented
+    title: str = NotImplemented
 
     @abstractmethod
     def __init__(self, query):
@@ -27,3 +30,7 @@ class AbstractDetector(ABC):
     @abstractmethod
     def check(self):
         pass
+
+    def get_description(self):
+        return load_description("sqleyes.definitions", "antipatterns/",
+                                self.filename)
