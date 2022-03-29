@@ -85,7 +85,9 @@ class OutputPrinter(AbstractPrinter):
                 self.console.print()
                 self.console.print(f"[bold red]type[/bold red]: {type}")
                 self.console.print(f"[bold red]title[/bold red]: {title}")
-                self.console.print(f"[bold red]location(s)[/bold red]: {locations}")
+
+                if locations:
+                    self.console.print(f"[bold red]location(s)[/bold red]: {locations}")
 
                 for snippet in location_snippets:
                     self.console.print(Padding(snippet, (2, 2, 1, 2)))
