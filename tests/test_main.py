@@ -206,7 +206,7 @@ def test_main_ambiguous_groups(test_input, expected):
          DEFINITIONS["anti_patterns"]["random_selection"]["type"]]]
     ),
     (
-        "SELECT pId FROM product ORDER BY RAND(6)*(10-5+1)+5 LIMIT 1",
+        "SELECT pId FROM product ORDER BY RAND(6)*5 LIMIT 1",
         [[DEFINITIONS["anti_patterns"]["random_selection"]["title"],
          DEFINITIONS["anti_patterns"]["random_selection"]["type"]]]
     ),
@@ -274,6 +274,20 @@ def test_main_poor_mans_search_engine(test_input, expected):
         "SELECT pId FROM product ORDER BY price",
         []
     ),
+    (
+        """SELECT COUNT(bp.product_id) AS how_many_products,
+COUNT(dev.account_id) AS how_many_developers,
+COUNT(b.bug_id)/COUNT(dev.account_id) AS avg_bugs_per_developer,
+COUNT(cust.account_id) AS how_many_customers
+FROM Bugs b JOIN BugsProducts bp ON (b.bug_id = bp.bug_id)
+JOIN Accounts dev ON (b.assigned_to = dev.account_id)
+JOIN Accounts cust ON (b.reported_by = cust.account_id)
+WHERE cust.email IS NOT NULL
+GROUP BY bp.product_id""",
+        [[DEFINITIONS["anti_patterns"]["spaghetti_query"]["title"],
+         DEFINITIONS["anti_patterns"]["spaghetti_query"]["type"],
+         "high"]],
+    ),
 ])
 def test_main_spaghetti_query(test_input, expected):
     outputs = main(test_input)
@@ -282,4 +296,4 @@ def test_main_spaghetti_query(test_input, expected):
         assert outputs == expected
     else:
         for index, output in enumerate(outputs):
-            assert [output.title, output.type] == expected[index]
+            assert [output.title, output.type, output.certainty] == expected[index]

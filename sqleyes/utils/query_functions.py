@@ -185,7 +185,6 @@ def get_columns_from_order_by_statement(query: str) -> List[str]:
 
     return order_columns
 
-
 def get_all_columns(query: str) -> List[str]:
     select_columns = get_columns_from_select_statement(query)
     group_by_columns = get_columns_from_group_by_statement(query)
