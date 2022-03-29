@@ -17,6 +17,7 @@ OPERATORS = ["+", "-", "*", "**", "/", "%", "&", "|", "||", "^", "=", ">", "<",
 EXPRESSIONS = ["CASE", "DECODE", "IF", "NULLIF", "COALESCE", "GREATEST",
                "GREATER", "LEAST", "LESSER", "CAST"]
 
+
 def format_query(query: str) -> str:
     """
     This function takes a query string as input and returns a formatted query.
@@ -27,7 +28,8 @@ def format_query(query: str) -> str:
     Returns:
         str: A query that is properly formatted.
     """
-    return sqlparse.format(query, keyword_case='upper')
+    return str(sqlparse.format(query, keyword_case='upper'))
+
 
 def has_subqueries(query: str) -> bool:
     """
@@ -47,6 +49,7 @@ def has_subqueries(query: str) -> bool:
 
     return len(select_count) > 0
 
+
 def has_union(query: str) -> bool:
     """
     This function takes a query string as input and returns True if that query
@@ -65,6 +68,7 @@ def has_union(query: str) -> bool:
 
     return len(union_count) > 0
 
+
 def get_unions(query: str) -> List[str]:
     """
     This function takes a query string as input and returns a list of query
@@ -76,9 +80,11 @@ def get_unions(query: str) -> List[str]:
     Returns:
         List[str]: A list of query unions
     """
-    if not has_union(query): return [query]
+    if not has_union(query):
+        return [query]
 
-    return re.split("\\s*UNION\\s*", query, flags=re.DOTALL | re.IGNORECASE )
+    return re.split("\\s*UNION\\s*", query, flags=re.DOTALL | re.IGNORECASE)
+
 
 def get_columns_from_select_statement(query: str) -> List[str]:
     """
@@ -185,12 +191,14 @@ def get_columns_from_order_by_statement(query: str) -> List[str]:
 
     return order_columns
 
+
 def get_all_columns(query: str) -> List[str]:
     select_columns = get_columns_from_select_statement(query)
     group_by_columns = get_columns_from_group_by_statement(query)
     order_by_columns = get_columns_from_order_by_statement(query)
 
     return select_columns + group_by_columns + order_by_columns
+
 
 def get_query_ops_and_expr(query: str) -> List[str]:
     """
@@ -218,7 +226,8 @@ def get_query_ops_and_expr(query: str) -> List[str]:
 
     return result
 
-def get_query_complexity(query: str) -> int:
+
+def get_query_complexity(query: str) -> float:
     """
     Calculates the complexity of a query based on the Halstead Metric + LoC
 
@@ -246,7 +255,8 @@ def get_query_complexity(query: str) -> int:
     N1, N2 = len(operators), len(operands)
     n1, n2 = len(set(operators)), len(set(operands))
 
-    return halstead_metrics(n1, n2, N1, N2)[4]
+    return float(halstead_metrics(n1, n2, N1, N2)[4])
+
 
 def check_single_value_rule(columns: List[str]) -> bool:
     """

@@ -23,20 +23,20 @@ class SpaghettiQueryDetector(AbstractDetector):
 
         if query_complexity < LOW_THRESHOLD:
             return None
-                          
+
         if LOW_THRESHOLD < query_complexity < MEDIUM_THRESHOLD:
-            certainty="low",
-        
+            certainty = "low"
+
         if MEDIUM_THRESHOLD < query_complexity < HIGH_THRESHOLD:
             certainty = "medium"
-        
+
         if HIGH_THRESHOLD < query_complexity:
             certainty = "high"
 
         return DetectorOutput(query=self.query,
-                           certainty=certainty,
-                           description=super().get_description(),
-                           detector_type=self.detector_type,
-                           locations=[],
-                           title=self.title,
-                           type=self.type)
+                              certainty=certainty,
+                              description=super().get_description(),
+                              detector_type=self.detector_type,
+                              locations=[],
+                              title=self.title,
+                              type=self.type)
