@@ -3,7 +3,7 @@ import pytest
 
 from sqleyes.utils.query_functions import (check_single_value_rule, format_query, get_all_columns, get_columns_from_order_by_statement,
                                            get_columns_from_select_statement,
-                                           get_columns_from_group_by_statement, get_unions, has_subqueries, has_union)
+                                           get_columns_from_group_by_statement, get_query_ops_and_expr, get_unions, has_subqueries, has_union)
 
 
 @pytest.mark.parametrize("test_input, expected", [
@@ -248,3 +248,51 @@ def test_get_columns_from_order_by_statement(test_input, expected):
 ])
 def test_get_all_columns(test_input, expected):
     assert get_all_columns(test_input) == expected
+
+
+@pytest.mark.parametrize("test_input, expected", [
+    (
+        "SELECT pId FROM product",
+        []
+    ),
+    (
+        "SELECT pId FROM product WHERE pId > 10",
+        [">"]
+    ),
+    (
+        "SELECT pId FROM product WHERE pId > 10 AND pId < 20",
+        [">", "AND" "<"]
+    ),
+    (
+        "SELECT pId FROM product WHERE pId > 10 AND pCat IS NOT NULL",
+        [">", "AND", "IS NOT"]
+    ),
+    (
+        "SELECT pId FROM product WHERE pId > 10 AND pCat is not null",
+        [">", "AND", "IS NOT"]
+    ),
+    (
+        """SELECT pId
+        FROM product
+        WHERE pId > 10 AND pCat IS NOT NULL AND pId IS NOT NULL""",
+        [">", "AND", "NOT", "IS NOT NULL", "AND", "NOT", "IS NOT NULL"]
+    ),
+    (
+        "SELECT GREATEST(1, 2, 3, 4, 5)",
+        ["GREATEST"]
+    ),
+    (
+        """SELECT OrderID, Quantity,
+CASE
+    WHEN Quantity > 30 THEN 'The quantity is greater than 30'
+    WHEN Quantity = 30 THEN 'The quantity is 30'
+    ELSE 'The quantity is under 30'
+END AS QuantityText
+FROM OrderDetails;
+        """,
+        ["CASE", ">" "=",]
+    )
+])
+def test_get_query_ops_and_expr(test_input, expected):
+    # We don't care about the order, so we can safely sort both lists
+    assert get_query_ops_and_expr(test_input) == expected.sort()

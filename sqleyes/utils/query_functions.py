@@ -1,13 +1,21 @@
 """Utility functions w.r.t queries"""
 import re
 from typing import List
-import sql_metadata
 
 import sqlparse
 
 from sqleyes.utils.code_complexity_metrics import halstead_metrics
 from sqleyes.utils.query_keywords import SQL_FUNCTIONS
 
+
+OPERATORS = ["+", "-", "*", "**", "/", "%", "&", "|", "||", "^", "=", ">", "<",
+             ">=", "<=", "!<", "!>", "<>", "+=", "-=", "/=", "/=", "%=", "&=",
+             "^-=", "|*=", "ALL", "AND", "&&", "ANY", "BETWEEN", "EXISTS",
+             "IN", "LIKE", "NOT", "OR", "SOME", "IS NULL", "IS NOT NULL",
+             "UNIQUE"]
+
+EXPRESSIONS = ["CASE", "DECODE", "IF", "NULLIF", "COALESCE", "GREATEST",
+               "GREATER", "LEAST", "LESSER", "CAST"]
 
 def format_query(query: str) -> str:
     """
@@ -185,6 +193,31 @@ def get_all_columns(query: str) -> List[str]:
 
     return select_columns + group_by_columns + order_by_columns
 
+def get_query_ops_and_expr(query: str) -> List[str]:
+    """
+    Finds all the operators and expressions used inside a query. Returns a list
+    of all operators and expressions
+
+    Parameters:
+        query (str): A SQL query string.
+
+    Returns:
+        List[str]: A list a all operators and expressions from the input query
+    """
+    result = []
+
+    for operator in OPERATORS:
+        count = query.count(operator)
+        if count != 0:
+            result.extend([operator] * count)
+
+    # Get all expressions used in the query
+    for expression in EXPRESSIONS:
+        count = query.count(expression)
+        if count != 0:
+            result.extend([expression] * count)
+
+    return result.sort()
 
 def get_query_complexity(query: str) -> int:
     """
@@ -198,14 +231,9 @@ def get_query_complexity(query: str) -> int:
     """
     query = format_query(query)
 
-    # Use sql-metadata to parse query
-    parsed_query = sql_metadata.Parser(query)
-
-
-    # TODO
     # From paper 'Measuring Query Complexity in SQLShare Workload'
     # Number of operators and expressions as Halstead operators
-    operators = []
+    operators = get_query_ops_and_expr(query)
 
     # Number of columns referenced in query as Halstead operants
     operands = get_all_columns(query)
