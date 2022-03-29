@@ -36,10 +36,25 @@ def has_subqueries(query: str) -> bool:
     select_count = re.findall(r'SELECT', query, flags=re.DOTALL |
                               re.IGNORECASE)
 
+    return len(select_count) > 1 and not has_union(query)
+
+def has_union(query: str) -> bool:
+    """
+    This function takes a query string as input and returns True if that query
+    contains a UNION.
+
+    Parameters:
+        query (str): The query string.
+
+    Returns:
+        bool: True if query contains a UNION, False otherwise
+    """
+    query = format_query(query)
+
     union_count = re.findall(r'UNION', query, flags=re.DOTALL |
                              re.IGNORECASE)
 
-    return len(select_count) > 1 and len(union_count) == 0
+    return len(union_count) > 0
 
 def get_columns_from_select_statement(query: str) -> List[str]:
     """
