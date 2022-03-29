@@ -98,6 +98,6 @@ class OutputPrinter(AbstractPrinter):
 
     def print(self, descriptions=False):
         self.print_summary()
-        if descriptions:
+        if descriptions and len(self.detector_output) != 0:
             self.console.print()
             self.print_descriptions()
