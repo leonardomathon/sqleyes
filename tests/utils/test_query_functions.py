@@ -25,6 +25,10 @@ def test_format_query(test_input, expected):
         True
     ),
     (
+        "SELECT a FROM b WHERE a = 1 UNION SELECT c from b WHERE c = 2",
+        False
+    ),
+    (
         """SELECT a
         FROM b
         WHERE

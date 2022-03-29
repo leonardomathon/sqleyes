@@ -36,7 +36,10 @@ def has_subqueries(query: str) -> bool:
     select_count = re.findall(r'SELECT', query, flags=re.DOTALL |
                               re.IGNORECASE)
 
-    return len(select_count) > 1
+    union_count = re.findall(r'UNION', query, flags=re.DOTALL |
+                             re.IGNORECASE)
+
+    return len(select_count) > 1 and len(union_count) == 0
 
 def get_columns_from_select_statement(query: str) -> List[str]:
     """
@@ -52,9 +55,6 @@ def get_columns_from_select_statement(query: str) -> List[str]:
     query = format_query(query)
 
     tokens = sqlparse.parse(query)[0].tokens
-
-
-    
 
     columns = re.findall(r'SELECT (.*?) FROM', query,
                          flags=re.DOTALL | re.IGNORECASE)
