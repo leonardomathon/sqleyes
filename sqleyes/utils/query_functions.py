@@ -1,6 +1,7 @@
 """Utility functions w.r.t queries"""
 import re
 from typing import List
+import sql_metadata
 
 import sqlparse
 
@@ -56,6 +57,21 @@ def has_union(query: str) -> bool:
 
     return len(union_count) > 0
 
+def get_unions(query: str) -> List[str]:
+    """
+    This function takes a query string as input and returns a list of query
+    unions
+
+    Parameters:
+        query (str): The query string.
+
+    Returns:
+        List[str]: A list of query unions
+    """
+    if not has_union(query): return [query]
+
+    return re.split("\\s*UNION\\s*", query, flags=re.DOTALL | re.IGNORECASE )
+
 def get_columns_from_select_statement(query: str) -> List[str]:
     """
     This function takes a query string as input and returns a list of columns
@@ -68,8 +84,6 @@ def get_columns_from_select_statement(query: str) -> List[str]:
         List[str]: A list of columns selected in the SELECT statement.
     """
     query = format_query(query)
-
-    tokens = sqlparse.parse(query)[0].tokens
 
     columns = re.findall(r'SELECT (.*?) FROM', query,
                          flags=re.DOTALL | re.IGNORECASE)
@@ -182,6 +196,11 @@ def get_query_complexity(query: str) -> int:
     Returns:
         int: The complexity of the query
     """
+    query = format_query(query)
+
+    # Use sql-metadata to parse query
+    parsed_query = sql_metadata.Parser(query)
+
 
     # TODO
     # From paper 'Measuring Query Complexity in SQLShare Workload'

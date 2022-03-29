@@ -3,7 +3,7 @@ import pytest
 
 from sqleyes.utils.query_functions import (check_single_value_rule, format_query, get_all_columns, get_columns_from_order_by_statement,
                                            get_columns_from_select_statement,
-                                           get_columns_from_group_by_statement, has_subqueries, has_union)
+                                           get_columns_from_group_by_statement, get_unions, has_subqueries, has_union)
 
 
 @pytest.mark.parametrize("test_input, expected", [
@@ -78,6 +78,24 @@ def test_has_subqueries(test_input, expected):
 ])
 def test_has_union(test_input, expected):
     assert has_union(test_input) == expected
+
+
+@pytest.mark.parametrize("test_input, expected", [
+    (
+        "SELECT a FROM b WHERE a = 1",
+        ["SELECT a FROM b WHERE a = 1"]
+    ),
+    (
+        "SELECT a FROM b WHERE a in (SELECT a FROM c WHERE a > 10)",
+        ["SELECT a FROM b WHERE a in (SELECT a FROM c WHERE a > 10)"]
+    ),
+    (
+        "SELECT a FROM b WHERE a = 1 UNION SELECT c from b WHERE c = 2",
+        ["SELECT a FROM b WHERE a = 1", "SELECT c from b WHERE c = 2"]
+    ),
+])
+def test_get_unions(test_input, expected):
+    assert get_unions(test_input) == expected
 
 
 @pytest.mark.parametrize("test_input, expected", [
