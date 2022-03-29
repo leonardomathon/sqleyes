@@ -38,6 +38,17 @@ def test_format_query(test_input, expected):
         True
     ),
     (
+        """SELECT a
+        FROM b
+        WHERE
+            a in (SELECT a FROM c WHERE a > 10) AND
+            d in (SELECT d from k)
+        UNION
+        SELECT h FROM p
+        """,
+        True
+    ),
+    (
         """SELECT COUNT(1) FROM
 (SELECT std.task_id FROM some_task_detail std WHERE std.STATUS = 1) a
 JOIN (SELECT st.task_id FROM some_task st WHERE task_type_id = 80) b

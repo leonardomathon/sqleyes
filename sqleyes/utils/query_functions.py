@@ -33,10 +33,10 @@ def has_subqueries(query: str) -> bool:
     """
     query = format_query(query)
 
-    select_count = re.findall(r'SELECT', query, flags=re.DOTALL |
+    select_count = re.findall(r'\(\s*SELECT', query, flags=re.DOTALL |
                               re.IGNORECASE)
 
-    return len(select_count) > 1 and not has_union(query)
+    return len(select_count) > 0
 
 def has_union(query: str) -> bool:
     """
