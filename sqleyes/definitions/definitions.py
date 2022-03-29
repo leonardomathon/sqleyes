@@ -24,6 +24,11 @@ DEFINITIONS = {
             "filename": "random_selection.md",
             "title": "Avoid ORDER BY RAND() usage",
             "type": "Random Selection"
+        },
+        "spaghetti_query": {
+            "filename": "spaghetti_query.md",
+            "title": "Avoid complex queries",
+            "type": "Spaghetti Query"
         }
     }
 }
