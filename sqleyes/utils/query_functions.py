@@ -10,7 +10,7 @@ from sqleyes.utils.query_keywords import SQL_FUNCTIONS
 
 def format_query(query: str) -> str:
     """
-    This function takes a query string as input and a formatted query.
+    This function takes a query string as input and returns a formatted query.
 
     Parameters:
         query (str): The query string.
@@ -19,6 +19,24 @@ def format_query(query: str) -> str:
         str: A query that is properly formatted.
     """
     return sqlparse.format(query, keyword_case='upper')
+
+def has_subqueries(query: str) -> bool:
+    """
+    This function takes a query string as input and returns True if that query
+    contains subqueries.
+
+    Parameters:
+        query (str): The query string.
+
+    Returns:
+        bool: True if query contains subqueries, False otherwise
+    """
+    query = format_query(query)
+
+    select_count = re.findall(r'SELECT', query, flags=re.DOTALL |
+                              re.IGNORECASE)
+
+    return len(select_count) > 1
 
 def get_columns_from_select_statement(query: str) -> List[str]:
     """
@@ -32,6 +50,11 @@ def get_columns_from_select_statement(query: str) -> List[str]:
         List[str]: A list of columns selected in the SELECT statement.
     """
     query = format_query(query)
+
+    tokens = sqlparse.parse(query)[0].tokens
+
+
+    
 
     columns = re.findall(r'SELECT (.*?) FROM', query,
                          flags=re.DOTALL | re.IGNORECASE)
