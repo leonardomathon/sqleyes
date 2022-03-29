@@ -1,9 +1,19 @@
 """Tests for sqleyes.utils.query_functions"""
 import pytest
 
-from sqleyes.utils.query_functions import (check_single_value_rule, get_all_columns, get_columns_from_order_by_statement,
+from sqleyes.utils.query_functions import (check_single_value_rule, format_query, get_all_columns, get_columns_from_order_by_statement,
                                            get_columns_from_select_statement,
                                            get_columns_from_group_by_statement)
+
+
+@pytest.mark.parametrize("test_input, expected", [
+    (
+        "select a, b FROM c, d where a > e, GROUP BY f, g",
+        "SELECT a, b FROM c, d WHERE a > e, GROUP BY f, g"
+    ),
+])
+def test_format_query(test_input, expected):
+    assert format_query(test_input) == expected
 
 
 @pytest.mark.parametrize("test_input, expected", [

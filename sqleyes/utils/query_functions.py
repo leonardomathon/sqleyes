@@ -8,6 +8,18 @@ from sqleyes.utils.code_complexity_metrics import halstead_metrics
 from sqleyes.utils.query_keywords import SQL_FUNCTIONS
 
 
+def format_query(query: str) -> str:
+    """
+    This function takes a query string as input and a formatted query.
+
+    Parameters:
+        query (str): The query string.
+
+    Returns:
+        str: A query that is properly formatted.
+    """
+    return sqlparse.format(query, keyword_case='upper')
+
 def get_columns_from_select_statement(query: str) -> List[str]:
     """
     This function takes a query string as input and returns a list of columns
@@ -19,6 +31,8 @@ def get_columns_from_select_statement(query: str) -> List[str]:
     Returns:
         List[str]: A list of columns selected in the SELECT statement.
     """
+    query = format_query(query)
+
     columns = re.findall(r'SELECT (.*?) FROM', query,
                          flags=re.DOTALL | re.IGNORECASE)
 
@@ -41,6 +55,8 @@ def get_columns_from_group_by_statement(query: str) -> List[str]:
     Returns:
         List[str]: A list of column names in the GROUP BY statement.
     """
+    query = format_query(query)
+
     tokens = sqlparse.parse(query)[0].tokens
 
     # Find index of group by keyword in tokens
@@ -80,6 +96,8 @@ def get_columns_from_order_by_statement(query: str) -> List[str]:
     Returns:
         List[str]: A list of columns selected in the SELECT statement.
     """
+    query = format_query(query)
+
     tokens = sqlparse.parse(query)[0].tokens
 
     # Find index of group by keyword in tokens
