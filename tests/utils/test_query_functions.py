@@ -1,9 +1,14 @@
 """Tests for sqleyes.utils.query_functions"""
 import pytest
 
-from sqleyes.utils.query_functions import (check_single_value_rule, format_query, get_all_columns, get_columns_from_order_by_statement,
+from sqleyes.utils.query_functions import (check_single_value_rule, format_query,
+                                           get_all_columns, get_columns_from_order_by_statement,
                                            get_columns_from_select_statement,
-                                           get_columns_from_group_by_statement, get_query_complexity, get_query_ops_and_expr, get_unions, has_subqueries, has_union)
+                                           get_columns_from_group_by_statement,
+                                           get_query_complexity,
+                                           get_query_ops_and_expr,
+                                           get_unions, has_subqueries,
+                                           has_union)
 
 
 @pytest.mark.parametrize("test_input, expected", [
@@ -14,6 +19,7 @@ from sqleyes.utils.query_functions import (check_single_value_rule, format_query
 ])
 def test_format_query(test_input, expected):
     assert format_query(test_input) == expected
+
 
 @pytest.mark.parametrize("test_input, expected", [
     (
@@ -59,7 +65,6 @@ ON a.task_id = b.task_id;
 ])
 def test_has_subqueries(test_input, expected):
     assert has_subqueries(test_input) == expected
-
 
 
 @pytest.mark.parametrize("test_input, expected", [
@@ -290,7 +295,7 @@ CASE
 END AS QuantityText
 FROM OrderDetails;
         """,
-        ["CASE", ">" "=",]
+        ["CASE", ">" "="]
     )
 ])
 def test_get_query_ops_and_expr(test_input, expected):

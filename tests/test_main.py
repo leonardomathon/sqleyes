@@ -286,7 +286,7 @@ WHERE cust.email IS NOT NULL
 GROUP BY bp.product_id""",
         [[DEFINITIONS["anti_patterns"]["spaghetti_query"]["title"],
          DEFINITIONS["anti_patterns"]["spaghetti_query"]["type"],
-         "high"]],
+         "low"]],
     ),
 ])
 def test_main_spaghetti_query(test_input, expected):
