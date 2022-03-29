@@ -3,7 +3,7 @@ import pytest
 
 from sqleyes.utils.query_functions import (check_single_value_rule, format_query, get_all_columns, get_columns_from_order_by_statement,
                                            get_columns_from_select_statement,
-                                           get_columns_from_group_by_statement, get_query_ops_and_expr, get_unions, has_subqueries, has_union)
+                                           get_columns_from_group_by_statement, get_query_complexity, get_query_ops_and_expr, get_unions, has_subqueries, has_union)
 
 
 @pytest.mark.parametrize("test_input, expected", [
@@ -295,4 +295,39 @@ FROM OrderDetails;
 ])
 def test_get_query_ops_and_expr(test_input, expected):
     # We don't care about the order, so we can safely sort both lists
-    assert get_query_ops_and_expr(test_input) == expected.sort()
+    assert get_query_ops_and_expr(test_input).sort() == expected.sort()
+
+
+@pytest.mark.parametrize("query_one, query_two", [
+    (
+        "SELECT pId FROM product",
+        "SELECT pId, pCat FROM product"
+    ),
+    (
+        "SELECT pId, pCat FROM product",
+        "SELECT pId, pCat FROM product WHERE pCat <> NULL"
+    ),
+    (
+        "SELECT * FROM product WHERE pId > 10",
+        "SELECT * FROM product WHERE pId > 10 ORDER BY price DESC",
+    ),
+    (
+        """SELECT a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u
+        FROM product""",
+        """SELECT a, b
+        FROM product
+        WHERE a > 10
+        GROUP BY b, c
+        ORDER BY b ASC""",
+    ),
+    (
+        "SELECT a FROM b WHERE a < 10",
+        "SELECT a FROM b WHERE a IN (SELECT a FROM c)"
+    ),
+    (
+        "SELECT a FROM b WHERE a IN (SELECT a FROM c)",
+        "SELECT a FROM b WHERE a IN (SELECT a FROM c WHERE a > 10)"
+    ),
+])
+def test_get_query_complexity(query_one, query_two):
+    assert get_query_complexity(query_one) <= get_query_complexity(query_two)

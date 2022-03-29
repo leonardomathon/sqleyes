@@ -217,7 +217,7 @@ def get_query_ops_and_expr(query: str) -> List[str]:
         if count != 0:
             result.extend([expression] * count)
 
-    return result.sort()
+    return result
 
 def get_query_complexity(query: str) -> int:
     """
@@ -236,7 +236,13 @@ def get_query_complexity(query: str) -> int:
     operators = get_query_ops_and_expr(query)
 
     # Number of columns referenced in query as Halstead operants
-    operands = get_all_columns(query)
+    # If query has a UNION, get all columns for each query in the union
+    operands = []
+    if (has_union(query)):
+        for q in get_unions(query):
+            operands.extend(get_all_columns(q))
+    else:
+        operands.extend(get_all_columns(query))
 
     N1, N2 = len(operators), len(operands)
     n1, n2 = len(set(operators)), len(set(operands))
