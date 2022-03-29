@@ -2,7 +2,7 @@
 import math
 
 
-def halstead_metrics(n1, n2, N1, N2):
+def halstead_metrics(n1: int, n2: int, N1: int, N2: int):
     """
     Compute Halstead metrics for a given program.
 

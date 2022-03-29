@@ -243,7 +243,6 @@ def get_query_complexity(query: str) -> int:
 
     return halstead_metrics(n1, n2, N1, N2)[4]
 
-
 def check_single_value_rule(columns: List[str]) -> bool:
     """
     This function checks if the columns in the list break the single-value
