@@ -40,6 +40,8 @@ def parse_query(query: str) -> List[str]:
     Returns:
         List[str]: A list of queries contained in the query.
     """
+    if query == "":
+        return []
 
     parsed_query = sqlparse.parse(query)[0]
     _, subqueries = get_subqueries(parsed_query)
