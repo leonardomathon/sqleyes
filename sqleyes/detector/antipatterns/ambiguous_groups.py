@@ -15,8 +15,9 @@ class AmbiguousGroupsDetector(AbstractDetector):
     type = DEFINITIONS["anti_patterns"]["ambiguous_groups"]["type"]
     title = DEFINITIONS["anti_patterns"]["ambiguous_groups"]["title"]
 
-    def __init__(self, query):
+    def __init__(self, query, subqueries):
         super().__init__(query)
+        self.subqueries = subqueries
 
     def check(self):
         pattern = re.compile(r'GROUP\s*BY', re.IGNORECASE)
@@ -26,28 +27,29 @@ class AmbiguousGroupsDetector(AbstractDetector):
         for match in pattern.finditer(self.query):
             locations.append(match.span())
 
-        if pattern.search(self.query):
-            # GROUP BY pattern is found in the query
+        for query in self.subqueries:
+            if pattern.search(query):
+                # GROUP BY pattern is found in the query
 
-            # Get columns in SELECT & GROUP BY statement
-            select_columns = get_columns_from_select_statement(self.query)
-            group_columns = get_columns_from_group_by_statement(self.query)
+                # Get columns in SELECT & GROUP BY statement
+                select_columns = get_columns_from_select_statement(query)
+                group_columns = get_columns_from_group_by_statement(query)
 
-            # Get columns which are in select_columns but not in group_columns
-            remaining_columns = list(set(select_columns) - set(group_columns))
+                # Get columns which are in select_columns but not in group_columns
+                remaining_columns = list(set(select_columns) - set(group_columns))
 
-            # Check if the remaining columns break single-value rule
-            single_values = check_single_value_rule(remaining_columns)
+                # Check if the remaining columns break single-value rule
+                single_values = check_single_value_rule(remaining_columns)
 
-            if not single_values:
-                return DetectorOutput(query=self.query,
-                                      certainty="high",
-                                      description=super().get_description(),
-                                      detector_type=self.detector_type,
-                                      locations=locations,
-                                      title=self.title,
-                                      type=self.type)
+                if not single_values:
+                    return DetectorOutput(query=self.query,
+                                          certainty="high",
+                                          description=super().get_description(),
+                                          detector_type=self.detector_type,
+                                          locations=locations,
+                                          title=self.title,
+                                          type=self.type)
 
-            return None
+                return None
 
         return None

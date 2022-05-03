@@ -4,11 +4,11 @@ import pytest
 from sqleyes.utils.query_functions import (check_single_value_rule, format_query,
                                            get_all_columns, get_columns_from_order_by_statement,
                                            get_columns_from_select_statement,
-                                           get_columns_from_group_by_statement,
+                                           get_columns_from_group_by_statement, get_excepts,
                                            get_query_complexity,
                                            get_query_ops_and_expr,
-                                           get_unions, has_subqueries,
-                                           has_union)
+                                           get_unions, has_except, has_subqueries,
+                                           has_union, parse_query)
 
 
 @pytest.mark.parametrize("test_input, expected", [
@@ -101,6 +101,42 @@ def test_has_union(test_input, expected):
 ])
 def test_get_unions(test_input, expected):
     assert get_unions(test_input) == expected
+
+
+@pytest.mark.parametrize("test_input, expected", [
+    (
+        "SELECT a FROM b WHERE a = 1",
+        False
+    ),
+    (
+        "SELECT a FROM b WHERE a in (SELECT a FROM c WHERE a > 10)",
+        False
+    ),
+    (
+        "SELECT a FROM b WHERE a = 1 EXCEPT SELECT c from b WHERE c = 2",
+        True
+    ),
+])
+def test_has_except(test_input, expected):
+    assert has_except(test_input) == expected
+
+
+@pytest.mark.parametrize("test_input, expected", [
+    (
+        "SELECT a FROM b WHERE a = 1",
+        ["SELECT a FROM b WHERE a = 1"]
+    ),
+    (
+        "SELECT a FROM b WHERE a in (SELECT a FROM c WHERE a > 10)",
+        ["SELECT a FROM b WHERE a in (SELECT a FROM c WHERE a > 10)"]
+    ),
+    (
+        "SELECT a FROM b WHERE a = 1 EXCEPT SELECT c from b WHERE c = 2",
+        ["SELECT a FROM b WHERE a = 1", "SELECT c from b WHERE c = 2"]
+    ),
+])
+def test_get_excepts(test_input, expected):
+    assert get_excepts(test_input) == expected
 
 
 @pytest.mark.parametrize("test_input, expected", [
@@ -336,3 +372,27 @@ def test_get_query_ops_and_expr(test_input, expected):
 ])
 def test_get_query_complexity(query_one, query_two):
     assert get_query_complexity(query_one) <= get_query_complexity(query_two)
+
+
+@pytest.mark.parametrize("test_input, expected", [
+    (
+        "",
+        []
+    ),
+    (
+        "SELECT pId FROM product",
+        ["SELECT pId FROM product"]
+    ),
+    (
+        "SELECT pId FROM (SELECT * FROM newProduct)",
+        ["SELECT pId FROM <subquery>", "SELECT * FROM newProduct"]
+    ),
+    (
+        """SELECT pId FROM (SELECT * FROM x) WHERE pId IN (SELECT * FROM y)""",
+        ["SELECT pId FROM <subquery> WHERE pId IN <subquery>",
+         "SELECT * FROM x",
+         "SELECT * FROM y"]
+    )
+])
+def test_parse_query(test_input, expected):
+    assert parse_query(test_input) == expected

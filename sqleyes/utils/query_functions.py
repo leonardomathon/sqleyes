@@ -1,6 +1,6 @@
 """Utility functions w.r.t queries"""
 import re
-from typing import List
+from typing import List, Tuple
 
 import sqlparse
 
@@ -16,6 +16,47 @@ OPERATORS = ["+", "-", "*", "**", "/", "%", "&", "|", "||", "^", "=", ">", "<",
 
 EXPRESSIONS = ["CASE", "DECODE", "IF", "NULLIF", "COALESCE", "GREATEST",
                "GREATER", "LEAST", "LESSER", "CAST"]
+
+
+def get_subqueries(parsed_query: sqlparse.sql.Statement) -> Tuple[str, List[str]]:
+    """
+    This function takes parsed query Statement object as input and returns a
+    list of the main query and all the subqueries.
+
+    Parameters:
+        query (sqlparse.sql.Statement): A statement object defined by sqlparse
+
+    Returns:
+        List[str]: A list of queries contained in the query.
+    """
+    if type(parsed_query) != sqlparse.sql.Token:
+        paren = isinstance(parsed_query, sqlparse.sql.Parenthesis)
+        v = [get_subqueries(i) for i in (parsed_query if not paren else parsed_query[1:-1])]
+        subseq, qrs = ''.join(str(i[0]) for i in v), [x for _, y in v for x in y]
+        if [*parsed_query][paren].value == 'SELECT':
+            return '<subquery>', [subseq]+qrs
+        return subseq, qrs
+    return parsed_query, []
+
+
+def parse_query(query: str) -> List[str]:
+    """
+    This function takes a query string as input and returns a list of the main
+    query and all the subqueries.
+
+    Parameters:
+        query (str): The query string.
+
+    Returns:
+        List[str]: A list of queries contained in the query.
+    """
+    if query == "":
+        return []
+
+    parsed_query = sqlparse.parse(query)[0]
+    _, subqueries = get_subqueries(parsed_query)
+
+    return subqueries
 
 
 def format_query(query: str) -> str:
@@ -84,6 +125,42 @@ def get_unions(query: str) -> List[str]:
         return [query]
 
     return re.split("\\s*UNION\\s*", query, flags=re.DOTALL | re.IGNORECASE)
+
+
+def has_except(query: str) -> bool:
+    """
+    This function takes a query string as input and returns True if that query
+    contains a EXCEPT.
+
+    Parameters:
+        query (str): The query string.
+
+    Returns:
+        bool: True if query contains a EXCEPT, False otherwise
+    """
+    query = format_query(query)
+
+    except_count = re.findall(r'EXCEPT', query, flags=re.DOTALL |
+                              re.IGNORECASE)
+
+    return len(except_count) > 0
+
+
+def get_excepts(query: str) -> List[str]:
+    """
+    This function takes a query string as input and returns a list of query
+    excepts
+
+    Parameters:
+        query (str): The query string.
+
+    Returns:
+        List[str]: A list of query excepts
+    """
+    if not has_except(query):
+        return [query]
+
+    return re.split("\\s*EXCEPT\\s*", query, flags=re.DOTALL | re.IGNORECASE)
 
 
 def get_columns_from_select_statement(query: str) -> List[str]:
