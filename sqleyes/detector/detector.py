@@ -35,8 +35,8 @@ class Detector:
         if self.query == "":
             return []
 
-        ap_ambiguous_groups = AmbiguousGroupsDetector(query=self.query, \
-            subqueries=self.subqueries).check()
+        ap_ambiguous_groups = AmbiguousGroupsDetector(query=self.query,
+                                                      subqueries=self.subqueries).check()
         self.anti_pattern_list.append(ap_ambiguous_groups)
 
         ap_fear_of_the_unknown = FearOfTheUnknownDetector(query=self.query) \

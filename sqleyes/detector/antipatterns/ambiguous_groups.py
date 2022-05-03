@@ -43,12 +43,12 @@ class AmbiguousGroupsDetector(AbstractDetector):
 
                 if not single_values:
                     return DetectorOutput(query=self.query,
-                                        certainty="high",
-                                        description=super().get_description(),
-                                        detector_type=self.detector_type,
-                                        locations=locations,
-                                        title=self.title,
-                                        type=self.type)
+                                          certainty="high",
+                                          description=super().get_description(),
+                                          detector_type=self.detector_type,
+                                          locations=locations,
+                                          title=self.title,
+                                          type=self.type)
 
                 return None
 

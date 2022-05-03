@@ -1,6 +1,6 @@
 """Utility functions w.r.t queries"""
 import re
-from typing import List
+from typing import List, Tuple
 
 import sqlparse
 
@@ -18,7 +18,7 @@ EXPRESSIONS = ["CASE", "DECODE", "IF", "NULLIF", "COALESCE", "GREATEST",
                "GREATER", "LEAST", "LESSER", "CAST"]
 
 
-def get_subqueries(parsed_query: sqlparse.sql.Statement) -> List[str]: 
+def get_subqueries(parsed_query: sqlparse.sql.Statement) -> Tuple[str, List[str]]:
     """
     This function takes parsed query Statement object as input and returns a
     list of the main query and all the subqueries.
@@ -30,12 +30,12 @@ def get_subqueries(parsed_query: sqlparse.sql.Statement) -> List[str]:
         List[str]: A list of queries contained in the query.
     """
     if type(parsed_query) != sqlparse.sql.Token:
-     paren = isinstance(parsed_query, sqlparse.sql.Parenthesis)
-     v = [get_subqueries(i) for i in (parsed_query if not paren else parsed_query[1:-1])]
-     subseq, qrs = ''.join(str(i[0]) for i in v), [x for _, y in v for x in y]
-     if [*parsed_query][paren].value == 'SELECT':
-        return '<subquery>', [subseq]+qrs
-     return subseq, qrs
+        paren = isinstance(parsed_query, sqlparse.sql.Parenthesis)
+        v = [get_subqueries(i) for i in (parsed_query if not paren else parsed_query[1:-1])]
+        subseq, qrs = ''.join(str(i[0]) for i in v), [x for _, y in v for x in y]
+        if [*parsed_query][paren].value == 'SELECT':
+            return '<subquery>', [subseq]+qrs
+        return subseq, qrs
     return parsed_query, []
 
 
@@ -141,7 +141,7 @@ def has_except(query: str) -> bool:
     query = format_query(query)
 
     except_count = re.findall(r'EXCEPT', query, flags=re.DOTALL |
-                             re.IGNORECASE)
+                              re.IGNORECASE)
 
     return len(except_count) > 0
 
