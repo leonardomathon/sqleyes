@@ -18,7 +18,17 @@ EXPRESSIONS = ["CASE", "DECODE", "IF", "NULLIF", "COALESCE", "GREATEST",
                "GREATER", "LEAST", "LESSER", "CAST"]
 
 
-def get_subqueries(parsed_query):
+def get_subqueries(parsed_query: sqlparse.sql.Statement) -> List[str]: 
+    """
+    This function takes parsed query Statement object as input and returns a
+    list of the main query and all the subqueries.
+
+    Parameters:
+        query (sqlparse.sql.Statement): A statement object defined by sqlparse
+
+    Returns:
+        List[str]: A list of queries contained in the query.
+    """
     if type(parsed_query) != sqlparse.sql.Token:
      paren = isinstance(parsed_query, sqlparse.sql.Parenthesis)
      v = [get_subqueries(i) for i in (parsed_query if not paren else parsed_query[1:-1])]

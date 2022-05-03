@@ -8,7 +8,7 @@ from sqleyes.utils.query_functions import (check_single_value_rule, format_query
                                            get_query_complexity,
                                            get_query_ops_and_expr,
                                            get_unions, has_subqueries,
-                                           has_union)
+                                           has_union, parse_query)
 
 
 @pytest.mark.parametrize("test_input, expected", [
@@ -336,3 +336,27 @@ def test_get_query_ops_and_expr(test_input, expected):
 ])
 def test_get_query_complexity(query_one, query_two):
     assert get_query_complexity(query_one) <= get_query_complexity(query_two)
+
+
+@pytest.mark.parametrize("test_input, expected", [
+    (
+        "",
+        []
+    ),
+    (
+        "SELECT pId FROM product",
+        ["SELECT pId FROM product"]
+    ),
+    (
+        "SELECT pId FROM (SELECT * FROM newProduct)",
+        ["SELECT pId FROM <subquery>", "SELECT * FROM newProduct"]
+    ),
+    (
+        """SELECT pId FROM (SELECT * FROM x) WHERE pId IN (SELECT * FROM y)""",
+        ["SELECT pId FROM <subquery> WHERE pId IN <subquery>",
+         "SELECT * FROM x",
+         "SELECT * FROM y"]
+    )
+])
+def test_parse_query(test_input, expected):
+    assert parse_query(test_input) == expected
