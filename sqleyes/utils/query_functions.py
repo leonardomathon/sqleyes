@@ -127,6 +127,42 @@ def get_unions(query: str) -> List[str]:
     return re.split("\\s*UNION\\s*", query, flags=re.DOTALL | re.IGNORECASE)
 
 
+def has_except(query: str) -> bool:
+    """
+    This function takes a query string as input and returns True if that query
+    contains a EXCEPT.
+
+    Parameters:
+        query (str): The query string.
+
+    Returns:
+        bool: True if query contains a EXCEPT, False otherwise
+    """
+    query = format_query(query)
+
+    except_count = re.findall(r'EXCEPT', query, flags=re.DOTALL |
+                             re.IGNORECASE)
+
+    return len(except_count) > 0
+
+
+def get_excepts(query: str) -> List[str]:
+    """
+    This function takes a query string as input and returns a list of query
+    excepts
+
+    Parameters:
+        query (str): The query string.
+
+    Returns:
+        List[str]: A list of query excepts
+    """
+    if not has_except(query):
+        return [query]
+
+    return re.split("\\s*EXCEPT\\s*", query, flags=re.DOTALL | re.IGNORECASE)
+
+
 def get_columns_from_select_statement(query: str) -> List[str]:
     """
     This function takes a query string as input and returns a list of columns
