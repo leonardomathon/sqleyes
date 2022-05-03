@@ -7,6 +7,7 @@ from sqleyes.detector.antipatterns.poor_mans_search_engine import PoorMansSearch
 from sqleyes.detector.antipatterns.random_selection import RandomSelectionDetector
 from sqleyes.detector.antipatterns.spaghetti_query import SpaghettiQueryDetector
 from sqleyes.detector.detector_output import DetectorOutput
+from sqleyes.utils.query_functions import parse_query
 
 
 class Detector:
@@ -20,6 +21,7 @@ class Detector:
 
     def __init__(self, query: str):
         self.query = query
+        self.subqueries = parse_query(query)
         self.anti_pattern_list: List[DetectorOutput] = []
 
     def run(self) -> List[DetectorOutput]:
@@ -33,8 +35,8 @@ class Detector:
         if self.query == "":
             return []
 
-        ap_ambiguous_groups = AmbiguousGroupsDetector(query=self.query) \
-            .check()
+        ap_ambiguous_groups = AmbiguousGroupsDetector(query=self.query, \
+            subqueries=self.subqueries).check()
         self.anti_pattern_list.append(ap_ambiguous_groups)
 
         ap_fear_of_the_unknown = FearOfTheUnknownDetector(query=self.query) \
