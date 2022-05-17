@@ -333,7 +333,7 @@ def get_query_ops_and_expr(query: str) -> List[str]:
         i += 1
 
     # Check every element if its an operator or expression
-    for elem in query:
+    for elem in query_tokens:
         for operator in OPERATORS:
             if elem == operator:
                 result.append(operator)
