@@ -131,7 +131,7 @@ def test_main_fear_of_the_unknown(test_input, expected):
            FROM product
            WHERE price > 9.99
            GROUP BY pSupplier
-           HAVING count(pId) > 10""",
+        """,
         [[DEFINITIONS["anti_patterns"]["ambiguous_groups"]["title"],
          DEFINITIONS["anti_patterns"]["ambiguous_groups"]["type"]]]
     ),
