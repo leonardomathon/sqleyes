@@ -295,40 +295,41 @@ def get_query_ops_and_expr(query: str) -> List[str]:
     query = sqlparse.format(query, keyword_case="upper")
 
     # Split the query
-    query = query.split()
+    query_tokens = query.split()
 
     # Fix split
     # Merges ["SELECT", "*"] into ["SELECT *"]
     # Merges ["IS", "NULL"] into ["IS NULL"]
     # Merges ["ORDER", "BY"] into ["ORDER BY"]
     # Merges ["GROUP", "BY"] into ["GROUP BY"]
-    i, query_len = 0, len(query)
+    i, query_len = 0, len(query_tokens)
     while i < query_len - 1:
         merge_current_cel = False
-        if "SELECT" in query[i] and query[i + 1] == "*":
+        if "SELECT" in query_tokens[i] and query_tokens[i + 1] == "*":
             merge_current_cel = True
-        elif query[i] == "IS" and query[i + 1] == "NULL":
+        elif query_tokens[i] == "IS" and query_tokens[i + 1] == "NULL":
             merge_current_cel = True
-        elif query[i] == "ORDER" and query[i + 1] == "BY":
+        elif query_tokens[i] == "ORDER" and query_tokens[i + 1] == "BY":
             merge_current_cel = True
-        elif query[i] == "GROUP" and query[i + 1] == "BY":
+        elif query_tokens[i] == "GROUP" and query_tokens[i + 1] == "BY":
             merge_current_cel = True
 
         # Merge two cells into one
         # Adjust overall query length since we have one less cell
         if merge_current_cel:
-            query[i : i + 2] = [' '.join(query[i: i + 2])]
-            query_len -=  1
+            query_tokens[i:i + 2] = [' '.join(query_tokens[i:i + 2])]
+            query_len -= 1
 
         i += 1
 
     # Fix split
     # Merges ["IS", "NOT", "NULL"] into ["IS NOT NULL"]
-    i, query_len = 0, len(query)
+    i, query_len = 0, len(query_tokens)
     while i < query_len - 1:
-        if query[i] == "IS" and query[i + 1] == "NOT" and query[i + 2] == "NULL":
-            query[i : i + 3] = [' '.join(query[i: i + 3])]
-            query_len -=  2
+        if (query_tokens[i] == "IS" and query_tokens[i + 1] == "NOT" and
+                query_tokens[i + 2] == "NULL"):
+            query_tokens[i:i + 3] = [' '.join(query_tokens[i: i + 3])]
+            query_len -= 2
         i += 1
 
     # Check every element if its an operator or expression
