@@ -8,14 +8,15 @@ from sqleyes.utils.code_complexity_metrics import halstead_metrics
 from sqleyes.utils.query_keywords import SQL_FUNCTIONS
 
 
-OPERATORS = ["+", "-", "*", "**", "/", "%", "&", "|", "||", "^", "=", ">", "<",
-             ">=", "<=", "!<", "!>", "<>", "+=", "-=", "/=", "/=", "%=", "&=",
-             "^-=", "|*=", "ALL", "AND", "&&", "ANY", "BETWEEN", "EXISTS",
-             "IN", "LIKE", "NOT", "OR", "SOME", "IS NULL", "IS NOT NULL",
-             "UNIQUE"]
+OPERATORS = ["+", "-", "*", "**", "/", "%", "&", "|", "||", "^", "=", "!=",
+             ">", "<", ">=", "<=", "!<", "!>", "<>", "+=", "-=", "/=", "/=",
+             "%=", "&=", "^-=", "|*=", "ALL", "AND", "&&", "ANY", "BETWEEN",
+             "EXISTS", "IN", "LIKE", "NOT", "OR", "SOME", "IS NULL",
+             "IS NOT NULL", "UNIQUE"]
 
 EXPRESSIONS = ["CASE", "DECODE", "IF", "NULLIF", "COALESCE", "GREATEST",
-               "GREATER", "LEAST", "LESSER", "CAST"]
+               "GREATER", "LEAST", "LESSER", "CAST", "JOIN", "GROUP BY",
+               "WHERE", "HAVING", "ORDER BY", "UNION", "EXCEPT"]
 
 
 def get_subqueries(parsed_query: sqlparse.sql.Statement) -> Tuple[str, List[str]]:
@@ -290,16 +291,56 @@ def get_query_ops_and_expr(query: str) -> List[str]:
     """
     result = []
 
-    for operator in OPERATORS:
-        count = query.count(operator)
-        if count != 0:
-            result.extend([operator] * count)
+    # Format the query
+    query = sqlparse.format(query, keyword_case="upper")
 
-    # Get all expressions used in the query
-    for expression in EXPRESSIONS:
-        count = query.count(expression)
-        if count != 0:
-            result.extend([expression] * count)
+    # Split the query
+    query_tokens = query.split()
+
+    # Fix split
+    # Merges ["SELECT", "*"] into ["SELECT *"]
+    # Merges ["IS", "NULL"] into ["IS NULL"]
+    # Merges ["ORDER", "BY"] into ["ORDER BY"]
+    # Merges ["GROUP", "BY"] into ["GROUP BY"]
+    i, query_len = 0, len(query_tokens)
+    while i < query_len - 1:
+        merge_current_cel = False
+        if "SELECT" in query_tokens[i] and query_tokens[i + 1] == "*":
+            merge_current_cel = True
+        elif query_tokens[i] == "IS" and query_tokens[i + 1] == "NULL":
+            merge_current_cel = True
+        elif query_tokens[i] == "ORDER" and query_tokens[i + 1] == "BY":
+            merge_current_cel = True
+        elif query_tokens[i] == "GROUP" and query_tokens[i + 1] == "BY":
+            merge_current_cel = True
+
+        # Merge two cells into one
+        # Adjust overall query length since we have one less cell
+        if merge_current_cel:
+            query_tokens[i:i + 2] = [' '.join(query_tokens[i:i + 2])]
+            query_len -= 1
+
+        i += 1
+
+    # Fix split
+    # Merges ["IS", "NOT", "NULL"] into ["IS NOT NULL"]
+    i, query_len = 0, len(query_tokens)
+    while i < query_len - 1:
+        if (query_tokens[i] == "IS" and query_tokens[i + 1] == "NOT" and
+                query_tokens[i + 2] == "NULL"):
+            query_tokens[i:i + 3] = [' '.join(query_tokens[i: i + 3])]
+            query_len -= 2
+        i += 1
+
+    # Check every element if its an operator or expression
+    for elem in query_tokens:
+        for operator in OPERATORS:
+            if elem == operator:
+                result.append(operator)
+
+        for expression in EXPRESSIONS:
+            if elem == expression:
+                result.append(expression)
 
     return result
 
@@ -332,7 +373,9 @@ def get_query_complexity(query: str) -> float:
     N1, N2 = len(operators), len(operands)
     n1, n2 = len(set(operators)), len(set(operands))
 
-    return float(halstead_metrics(n1, n2, N1, N2)[4])
+    complexity = float(halstead_metrics(n1, n2, N1, N2)[3])
+
+    return complexity
 
 
 def check_single_value_rule(columns: List[str]) -> bool:

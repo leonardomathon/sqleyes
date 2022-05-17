@@ -29,7 +29,7 @@ def halstead_metrics(n1: int, n2: int, N1: int, N2: int):
     V = N * math.log2(n)
 
     # Difficulty
-    D = n1/2 * N2/n2
+    D = (n1/2) * (N2/n2)
 
     # Effort
     E = D * V

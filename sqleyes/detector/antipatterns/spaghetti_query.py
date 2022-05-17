@@ -15,22 +15,22 @@ class SpaghettiQueryDetector(AbstractDetector):
         super().__init__(query)
 
     def check(self):
-        LOW_THRESHOLD = 60
-        MEDIUM_THRESHOLD = 75
-        HIGH_THRESHOLD = 90
+        LOW_THRESHOLD = 2.5
+        MEDIUM_THRESHOLD = 4
+        HIGH_THRESHOLD = 5.5
 
         query_complexity = get_query_complexity(self.query)
 
         if query_complexity < LOW_THRESHOLD:
             return None
 
-        if LOW_THRESHOLD < query_complexity < MEDIUM_THRESHOLD:
+        if LOW_THRESHOLD <= query_complexity < MEDIUM_THRESHOLD:
             certainty = "low"
 
-        if MEDIUM_THRESHOLD < query_complexity < HIGH_THRESHOLD:
+        if MEDIUM_THRESHOLD <= query_complexity < HIGH_THRESHOLD:
             certainty = "medium"
 
-        if HIGH_THRESHOLD < query_complexity:
+        if HIGH_THRESHOLD <= query_complexity:
             certainty = "high"
 
         return DetectorOutput(query=self.query,
